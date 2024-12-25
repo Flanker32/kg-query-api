@@ -45,7 +45,7 @@ public class UserInformation extends HashMap<String, Object> {
     public boolean hasCuratedPermission(){
         Object groups = get("groups");
         List<String> g = null;
-        if(groups instanceof List<?> list){
+        if(groups instanceof List list){
             g = list;
         }
         else if(groups instanceof String string){
@@ -57,7 +57,7 @@ public class UserInformation extends HashMap<String, Object> {
     public boolean hasReleasedPermission(){
         Object groups = get("groups");
         List<String> g = null;
-        if(groups instanceof List<?> list){
+        if(groups instanceof List list){
             g = list;
         }
         else if(groups instanceof String string){

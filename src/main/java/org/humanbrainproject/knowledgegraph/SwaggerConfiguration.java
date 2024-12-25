@@ -27,48 +27,52 @@ import com.google.common.base.Predicates;
 import org.humanbrainproject.knowledgegraph.annotations.NoTests;
 import org.humanbrainproject.knowledgegraph.commons.ExternalApi;
 import org.humanbrainproject.knowledgegraph.commons.InternalApi;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 
 @Configuration
-@EnableSwagger2
+@EnableWebMvc
 @NoTests(NoTests.NO_LOGIC)
 public class SwaggerConfiguration {
 
     @Bean
-    public Docket externalApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("00_external")
-                .select()
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ExternalApi.class))
-                .paths(PathSelectors.regex("^(?!/error).*"))
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("API Documentation")
+                        .version("1.0")
+                        .description("API documentation for the project")
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
+    }
+
+    @Bean
+    public GroupedOpenApi externalApi() {
+        return GroupedOpenApi.builder()
+                .group("00_external")
+                .pathsToMatch("/external/**")
                 .build();
     }
 
     @Bean
-    public Docket publicApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("0_public")
-                .select()
-                .apis(Predicates.not(RequestHandlerSelectors.withClassAnnotation(InternalApi.class)))
-                .paths(PathSelectors.regex("^(?!/error).*"))
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("0_public")
+                .pathsToMatch("/public/**")
                 .build();
     }
 
-
     @Bean
-    public Docket internalApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("1_internal")
-                .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(InternalApi.class))
-                .paths(PathSelectors.regex("^(?!/error).*"))
-                        .build();
+    public GroupedOpenApi internalApi() {
+        return GroupedOpenApi.builder()
+                .group("1_internal")
+                .pathsToMatch("/internal/**")
+                .build();
     }
 
 

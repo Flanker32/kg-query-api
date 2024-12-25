@@ -40,7 +40,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-import springfox.documentation.annotations.ApiIgnore;
 
 import jakarta.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -83,7 +82,7 @@ public class InstancesAPI {
 
 
     @PostMapping("/{queryId}")
-    public ResponseEntity<List<Map>> getInstancesByIds(@RequestBody @Parameter(title = "The relative ids (starting with the organization) which shall be fetched") List<String> ids, @PathVariable String queryId, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @Parameter(title = VOCAB_DOC)  @RequestParam(value = VOCAB, required = false) String vocab, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws SolrServerException, IOException, JSONException {
+    public ResponseEntity<List<Map>> getInstancesByIds(@RequestBody @Parameter(description = "The relative ids (starting with the organization) which shall be fetched") List<String> ids, @PathVariable String queryId, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @Parameter(description = VOCAB_DOC)  @RequestParam(value = VOCAB, required = false) String vocab, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @Parameter(hidden = true) @RequestParam Map<String, String> allRequestParams) throws SolrServerException, IOException, JSONException {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         queryContext.populateQueryContext(databaseScope);
         Set<NexusInstanceReference> references = ids.stream().map(id -> NexusInstanceReference.createFromUrl(id)).collect(Collectors.toSet());

@@ -134,9 +134,9 @@ public class JsonLdStandardization {
 
 
     public <T> T extendInternalReferencesWithRelativeUrl(T input, NexusInstanceReferenceTransformer transformer) {
-        if (input instanceof List<?> list) {
+        if (input instanceof List list) {
             list.forEach(i -> extendInternalReferencesWithRelativeUrl(i, transformer));
-        } else if (input instanceof Map<?,?> map) {
+        } else if (input instanceof Map map) {
             if (map.containsKey(JsonLdConsts.ID)) {
                 String referencedId = (String) map.get(JsonLdConsts.ID);
                 NexusInstanceReference fromUrl = NexusInstanceReference.createFromUrl(referencedId);
@@ -268,7 +268,7 @@ public class JsonLdStandardization {
 
 
     private void applyKeyMap(Object object, Map keymapping) {
-        if (object instanceof Map<?,?> map) {
+        if (object instanceof Map map) {
             Set keys = new HashSet(map.keySet());
             for (Object key : keys) {
                 Object originalValue = map.get(key);

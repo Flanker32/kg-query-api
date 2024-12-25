@@ -110,10 +110,10 @@ public class Solr implements InitializingBean {
 
     private boolean checkNameListForValueExistance(String name, List<Object> fields) {
         for (Object type : fields) {
-            if (type instanceof List<?> list) {
+            if (type instanceof List list) {
                 for (Object o : list) {
-                    if (o instanceof NamedList<?> list) {
-                        if (list.get("name").equals(name)) {
+                    if (o instanceof NamedList list2) {
+                        if (list2.get("name").equals(name)) {
                             return true;
                         }
                     }

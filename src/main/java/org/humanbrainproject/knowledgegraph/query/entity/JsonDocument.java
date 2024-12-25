@@ -142,7 +142,7 @@ public class JsonDocument extends LinkedHashMap<String, Object>{
         if(o==null){
             map.put(propertyName, value);
         }
-        else if(o instanceof Collection<?> collection){
+        else if(o instanceof Collection collection){
             if(!collection.contains(value)) {
                 collection.add(value);
             }

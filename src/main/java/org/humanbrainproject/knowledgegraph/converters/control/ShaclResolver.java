@@ -70,7 +70,7 @@ public class ShaclResolver {
         Object imports = qualifiedDoc.get(OWL_NAMESPACE+"imports");
         if(imports!=null){
             List<Map> importList;
-            if(imports instanceof List<?> list){
+            if(imports instanceof List list){
                 importList = list;
             }
             else{

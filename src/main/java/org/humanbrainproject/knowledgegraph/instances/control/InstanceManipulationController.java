@@ -232,7 +232,7 @@ public class InstanceManipulationController {
         String targetClass = schemaController.getTargetClass(nexusSchemaReference);
         if (type == null) {
             payload.put(JsonLdConsts.TYPE, targetClass);
-        } else if (type instanceof Collection<?> collection) {
+        } else if (type instanceof Collection collection) {
             if (!collection.contains(targetClass)) {
                 collection.add(targetClass);
             }

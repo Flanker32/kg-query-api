@@ -145,7 +145,7 @@ public class FreemarkerTemplating {
     }
 
     private void replaceSpecialCharacters(Object o){
-        if(o instanceof Map<?,?> map){
+        if(o instanceof Map map){
             Set<Object> keys = new HashSet<Object>();
             keys.addAll(map.keySet());
             for (Object key : keys) {

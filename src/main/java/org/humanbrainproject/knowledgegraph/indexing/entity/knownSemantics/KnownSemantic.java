@@ -90,9 +90,9 @@ public abstract class KnownSemantic {
     }
 
     protected List<NexusInstanceReference> getReferencesForLinkedInstances(Object element, boolean onlyHttp) {
-        if (element instanceof List<?> list) {
+        if (element instanceof List list) {
             List<Object> releaseInstances = list;
-            return releaseInstances.stream().map(i -> getReferenceForLinkedInstance(i, onlyHttp)).collect(Collectors.toList());
+            return releaseInstances.stream().map(i -> (NexusInstanceReference)(getReferenceForLinkedInstance(i, onlyHttp))).collect(Collectors.toList());
         } else {
             return Collections.singletonList(getReferenceForLinkedInstance(element, onlyHttp));
         }

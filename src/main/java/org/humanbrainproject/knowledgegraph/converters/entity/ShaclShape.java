@@ -70,13 +70,13 @@ public class ShaclShape {
                 if(value instanceof Map<?,?> map && map.containsKey(JsonLdConsts.LIST)){
                     List l = (List)map.get(JsonLdConsts.LIST);
                     for (Object v : l) {
-                        if(v instanceof Map<?,?> map && map.containsKey(propertyKey)) {
-                            Object propertyValue = map.get(propertyKey);
-                            if(propertyValue instanceof List<?> list){
+                        if(v instanceof Map<?,?> map2 && map.containsKey(propertyKey)) {
+                            Object propertyValue = map2.get(propertyKey);
+                            if(propertyValue instanceof List list){
                                 result.addAll(list);
                             }
-                            else if(propertyValue instanceof Map<?,?> map){
-                                result.add(map);
+                            else if(propertyValue instanceof Map map3){
+                                result.add(map3);
                             }
                         }
                     }
