@@ -67,8 +67,8 @@ public class SpecificationQuery {
         List<String> definedMbbParameters = spec.getAllFilterParameters().stream().filter(f -> f.getOperation().equals(Op.MBB.getName())).map(f -> f.getParameterName()).filter(k -> filterValues.containsKey(k)).collect(Collectors.toList());
         for (String definedMbbParameter : definedMbbParameters) {
             Object boundingBox = filterValues.get(definedMbbParameter);
-            if(boundingBox instanceof String){
-                BoundingBox bbox = BoundingBox.parseBoundingBox((String) boundingBox);
+            if(boundingBox instanceof String string){
+                BoundingBox bbox = BoundingBox.parseBoundingBox(string);
                 Set<ArangoDocumentReference> arangoDocumentReferences = spatialSearch.minimalBoundingBox(bbox);
                 List<String> idRestrictions = DataQueryBuilder.createIdRestriction(arangoDocumentReferences);
                 filterValues.put(definedMbbParameter, idRestrictions);

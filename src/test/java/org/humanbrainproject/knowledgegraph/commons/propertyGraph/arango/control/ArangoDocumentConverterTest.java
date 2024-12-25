@@ -37,19 +37,19 @@ import org.humanbrainproject.knowledgegraph.commons.vocabulary.HBPVocabulary;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceReference;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusSchemaReference;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ArangoDocumentConverterTest {
 
     private ArangoDocumentConverter documentConverter;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.documentConverter = new ArangoDocumentConverter();
         this.documentConverter.configuration = TestObjectFactory.createNexusConfiguration();

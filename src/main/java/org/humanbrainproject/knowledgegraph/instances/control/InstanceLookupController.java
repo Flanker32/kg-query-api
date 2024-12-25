@@ -48,7 +48,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Component;
 
-import javax.json.Json;
+import jakarta.json.Json;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -183,7 +183,7 @@ public class InstanceLookupController {
                 queryMap.put(ArangoCollectionReference.fromNexusSchemaReference(schema), storedQuery);
             }
             catch (StoredQueryNotFoundException e){
-                logger.debug(String.format("Did not find stored query for %s - default behavior applies", schema.getRelativeUrl().getUrl()));
+                logger.debug("Did not find stored query for %s - default behavior applies".formatted(schema.getRelativeUrl().getUrl()));
             }
         }
         Map<ArangoCollectionReference, List<ArangoDocumentReference>> referencesByCollection = references.stream().map(ArangoDocumentReference::fromNexusInstance).collect(Collectors.groupingBy(ArangoDocumentReference::getCollection));

@@ -26,19 +26,19 @@ package org.humanbrainproject.knowledgegraph.query.entity;
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.entity.ArangoDocumentReference;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceReference;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AbstractQueryTest {
 
     AbstractQuery abstractQuery;
 
-    @Before
+    @BeforeEach
     public void setup(){
         this.abstractQuery = new AbstractQuery(TestObjectFactory.fooInstanceReference().getNexusSchema(), "foo"){};
 

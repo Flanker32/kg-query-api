@@ -67,16 +67,16 @@ public class ShaclShape {
         else{
             result = new ArrayList<>();
             for (Object value : this.shape.values()) {
-                if(value instanceof Map && ((Map)value).containsKey(JsonLdConsts.LIST)){
-                    List l = (List)((Map)value).get(JsonLdConsts.LIST);
+                if(value instanceof Map<?,?> map && map.containsKey(JsonLdConsts.LIST)){
+                    List l = (List)map.get(JsonLdConsts.LIST);
                     for (Object v : l) {
-                        if(v instanceof Map && ((Map)v).containsKey(propertyKey)) {
-                            Object propertyValue = ((Map) v).get(propertyKey);
-                            if(propertyValue instanceof List){
-                                result.addAll((List)propertyValue);
+                        if(v instanceof Map<?,?> map && map.containsKey(propertyKey)) {
+                            Object propertyValue = map.get(propertyKey);
+                            if(propertyValue instanceof List<?> list){
+                                result.addAll(list);
                             }
-                            else if(propertyValue instanceof Map){
-                                result.add((Map)propertyValue);
+                            else if(propertyValue instanceof Map<?,?> map){
+                                result.add(map);
                             }
                         }
                     }

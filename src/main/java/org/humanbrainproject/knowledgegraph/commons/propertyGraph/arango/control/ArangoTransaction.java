@@ -116,7 +116,7 @@ public class ArangoTransaction implements DatabaseTransaction {
                 else {
                     ArangoCollection targetCollection = databaseConnection.getOrCreateDB().collection(reference.getCollection().getName());
                     if(targetCollection.exists() && targetCollection.getInfo().getType() == CollectionType.EDGES){
-                        logger.error(String.format("Tried to insert a document into an edge collection (%s). This has to be an invalid payload (maybe the document was not properly defined to be a linking instance)", reference.getCollection().getName()));
+                        logger.error("Tried to insert a document into an edge collection (%s). This has to be an invalid payload (maybe the document was not properly defined to be a linking instance)".formatted(reference.getCollection().getName()));
                         break;
                     }
                     //Remove already existing instances
@@ -169,7 +169,7 @@ public class ArangoTransaction implements DatabaseTransaction {
                     logger.info("Inserted document: {} in database {}", document.getId(), db.name());
                     logger.debug("Payload of document {} in database {}: {}", document.getId(), db.name(), documentPayload);
                 } catch (ArangoDBException dbexception) {
-                    logger.error(String.format("Was not able to insert document: %s in database %s", document.getId(), db.name()), dbexception);
+                    logger.error("Was not able to insert document: %s in database %s".formatted(document.getId(), db.name()), dbexception);
                     throw dbexception;
                 }
             }
@@ -190,7 +190,7 @@ public class ArangoTransaction implements DatabaseTransaction {
                     logger.info("Updated document: {} in database {}", document.getId(), db.name());
                     logger.debug("Payload of document {} in database {}: {}", document.getId(), db.name(), documentPayload);
                 } catch (ArangoDBException dbexception) {
-                    logger.error(String.format("Was not able to update document: %s in database %s", document.getId(), db.name()), dbexception);
+                    logger.error("Was not able to update document: %s in database %s".formatted(document.getId(), db.name()), dbexception);
                     throw dbexception;
                 }
             }
@@ -213,7 +213,7 @@ public class ArangoTransaction implements DatabaseTransaction {
                             }
                         }
                     } catch (ArangoDBException dbexception) {
-                        logger.error(String.format("Was not able to delete the outgoing relation: %s in database %s", document.getId(), db.name()), dbexception);
+                        logger.error("Was not able to delete the outgoing relation: %s in database %s".formatted(document.getId(), db.name()), dbexception);
                         throw dbexception;
                     }
                 } else {
@@ -237,7 +237,7 @@ public class ArangoTransaction implements DatabaseTransaction {
                         collection.deleteDocument(document.getKey());
                         logger.info("Deleted document: {} from database {}", document.getId(), db.name());
                     } catch (ArangoDBException dbexception) {
-                        logger.error(String.format("Was not able to delete document: %s in database %s", document.getId(), db.name()), dbexception);
+                        logger.error("Was not able to delete document: %s in database %s".formatted(document.getId(), db.name()), dbexception);
                         throw dbexception;
                     }
                 } else {

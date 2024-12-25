@@ -152,8 +152,8 @@ public class DefaultAuthorizationContext implements AuthorizationContext {
     @Override
     public boolean isAllowedToSeeReleasedInstancesOnly() {
         Credential c = getCredential();
-        if(c instanceof OidcAccessToken) {
-            UserInformation userInfo = oidcClient.getUserInfo(((OidcAccessToken) c));
+        if(c instanceof OidcAccessToken token) {
+            UserInformation userInfo = oidcClient.getUserInfo(token);
             return !userInfo.hasCuratedPermission() && userInfo.hasReleasedPermission();
         }
         else return false;

@@ -23,20 +23,20 @@
 
 package org.humanbrainproject.knowledgegraph.commons.jsonld.control;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonTransformerTest {
 
     JsonTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.transformer = new JsonTransformer();
     }
@@ -88,7 +88,7 @@ public class JsonTransformerTest {
     public void parseToListOfStrings() {
         List<String> strings = transformer.parseToListOfStrings("[\"foo\", \"bar\"]");
         assertEquals(2, strings.size());
-        assertEquals("foo", strings.get(0));
+        assertEquals("foo", strings.getFirst());
         assertEquals("bar", strings.get(1));
     }
 

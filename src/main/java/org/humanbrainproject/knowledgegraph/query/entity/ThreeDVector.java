@@ -44,7 +44,7 @@ public class ThreeDVector {
 
     @Override
     public String toString() {
-        return String.format("%.16f,%.16f,%.16f", x, y, z);
+        return "%.16f,%.16f,%.16f".formatted(x, y, z);
     }
 
     public double getX() {

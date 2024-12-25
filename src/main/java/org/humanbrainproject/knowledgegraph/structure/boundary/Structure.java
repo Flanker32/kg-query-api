@@ -163,9 +163,9 @@ public class Structure {
         if(STRUCTURE_LOCK){
             throw new AsynchronousStartupDelay();
         }
-        logger.info(String.format("Refreshing the cache for structure queries %s", withLinks ? "with links" : "without links"));
+        logger.info("Refreshing the cache for structure queries %s".formatted(withLinks ? "with links" : "without links"));
         JsonDocument structure = getStructure(withLinks);
-        logger.info(String.format("Done refreshing the cache for structure queries %s", withLinks ? "with links" : "without links"));
+        logger.info("Done refreshing the cache for structure queries %s".formatted(withLinks ? "with links" : "without links"));
         return structure;
     }
 
@@ -209,7 +209,7 @@ public class Structure {
         jsonDocument.put("schemas", schemas);
         for (NexusSchemaReference schemaReference : allSchemas) {
             try {
-                logger.debug(String.format("fetching structure from schema %s", schemaReference.getRelativeUrl().getUrl()));
+                logger.debug("fetching structure from schema %s".formatted(schemaReference.getRelativeUrl().getUrl()));
                 JsonDocument structureForSchema = getStructureForSchema(schemaReference, withLinks);
                 if (structureForSchema != null) {
                     schemas.add(structureForSchema);
@@ -217,7 +217,7 @@ public class Structure {
             } catch (ArangoDBException exception) {
                 JsonDocument document = new JsonDocument();
                 document.put("id", schemaReference.getRelativeUrl().getUrl());
-                document.put("failure", String.format("Was not able to reflect. Cause: ", exception.getErrorMessage()));
+                document.put("failure", "Was not able to reflect. Cause: ".formatted(exception.getErrorMessage()));
                 schemas.add(document);
             }
         }

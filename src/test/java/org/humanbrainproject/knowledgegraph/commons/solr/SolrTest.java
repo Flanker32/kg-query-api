@@ -25,14 +25,14 @@ package org.humanbrainproject.knowledgegraph.commons.solr;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.humanbrainproject.knowledgegraph.query.entity.ThreeDVector;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
-@Ignore("Integration test")
+@Disabled("Integration test")
 public class SolrTest {
 
     @Test

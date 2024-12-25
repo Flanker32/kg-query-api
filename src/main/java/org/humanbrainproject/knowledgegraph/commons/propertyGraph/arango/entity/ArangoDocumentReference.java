@@ -81,7 +81,7 @@ public class ArangoDocumentReference {
 
 
     public String getId() {
-        return String.format("%s/%s", getCollection().getName(), getKey());
+        return "%s/%s".formatted(getCollection().getName(), getKey());
     }
 
     @Override

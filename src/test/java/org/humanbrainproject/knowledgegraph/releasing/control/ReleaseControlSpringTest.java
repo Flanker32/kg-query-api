@@ -25,16 +25,13 @@ package org.humanbrainproject.knowledgegraph.releasing.control;
 
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.entity.ArangoDocumentReference;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceReference;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
-@Ignore("integration test")
+@Disabled("integration test")
 public class ReleaseControlSpringTest {
 
     @Autowired

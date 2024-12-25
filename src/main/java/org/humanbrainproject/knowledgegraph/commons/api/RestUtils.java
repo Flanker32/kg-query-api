@@ -47,9 +47,9 @@ public class RestUtils {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode json = mapper.readTree((String)queryResult.getResults());
                 QueryResult newResult;
-                if(queryResult instanceof TransformedQueryResult){
+                if(queryResult instanceof TransformedQueryResult<?> result){
                     newResult = new TransformedQueryResult();
-                    ((TransformedQueryResult)newResult).setOriginalJson(((TransformedQueryResult) queryResult).getOriginalJson());
+                    ((TransformedQueryResult)newResult).setOriginalJson(result.getOriginalJson());
                 }
                 else{
                     newResult = new QueryResult();

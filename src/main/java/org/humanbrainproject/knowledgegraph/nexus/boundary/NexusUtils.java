@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,8 +89,8 @@ public class NexusUtils {
 
     public UploadStatus retreiveUploadStatus(UUID uuid) throws NotFoundException, ExecutionException, InterruptedException {
         Object o = uploader.retrieveStatus(uuid).get();
-        if(o instanceof UploadStatus){
-            return (UploadStatus)o;
+        if(o instanceof UploadStatus status){
+            return status;
         }else{
             throw new NotFoundException("Status not found");
         }

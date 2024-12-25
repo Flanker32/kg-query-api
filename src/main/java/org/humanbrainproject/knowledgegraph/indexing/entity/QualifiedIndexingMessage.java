@@ -48,8 +48,8 @@ public class QualifiedIndexingMessage {
         this.qualifiedMap = qualifiedMap;
         this.originalMessage = spec;
         Object type = this.qualifiedMap.get(JsonLdConsts.TYPE);
-        if(type instanceof String){
-            types = Collections.singleton((String)type);
+        if(type instanceof String string){
+            types = Collections.singleton(string);
         }
         else if(type instanceof Collection){
             HashSet<String> types = new HashSet<>();
@@ -86,8 +86,8 @@ public class QualifiedIndexingMessage {
             //The message neither points to an origin, nor to an inferred origin - it has to be the original itself.
             return originalMessage.getInstanceReference();
         }
-        if (originalParent instanceof Map) {
-          String id = (String) ((Map) originalParent).get(JsonLdConsts.ID);
+        if (originalParent instanceof Map<?,?> map) {
+          String id = (String) map.get(JsonLdConsts.ID);
           return NexusInstanceReference.createFromUrl(id);
         }
         return null;

@@ -25,7 +25,7 @@ package org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.contro
 
 import com.arangodb.model.AqlQueryOptions;
 import com.github.jsonldjava.core.JsonLdConsts;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.control.query.ArangoQueryFactory;
@@ -84,15 +84,15 @@ public class ArangoNativeRepository {
         String query = queryFactory.queryForValueWithProperty(SchemaOrgVocabulary.IDENTIFIER, value, Collections.singleton(collectionReference), ArangoVocabulary.NEXUS_RELATIVE_URL_WITH_REV, authorizationContext.getReadableOrganizations());
         List<List> result = query == null ? new ArrayList<>() : databaseFactory.getDefaultDB(false).getOrCreateDB().query(query, null, new AqlQueryOptions(), List.class).asListRemaining();
         if (result.size() == 1) {
-            if (result.get(0) != null) {
-                List list = (List) result.get(0);
+            if (result.getFirst() != null) {
+                List list = (List) result.getFirst();
                 if (list.isEmpty()) {
                     return null;
                 } else if (list.size() == 1) {
-                    String url = (String) ((List) result.get(0)).get(0);
+                    String url = (String) ((List) result.getFirst()).getFirst();
                     return url != null ? NexusInstanceReference.createFromUrl(url) : null;
                 } else {
-                    throw new UnexpectedNumberOfResults(String.format("Multiple instances with the same identifier in the same schema: %s", StringUtils.join(list.stream().filter(Objects::nonNull).map(Object::toString).toArray(), ", ")));
+                    throw new UnexpectedNumberOfResults("Multiple instances with the same identifier in the same schema: %s".formatted(StringUtils.join(list.stream().filter(Objects::nonNull).map(Object::toString).toArray(), ", ")));
                 }
             } else {
                 return null;
@@ -147,8 +147,8 @@ public class ArangoNativeRepository {
                 originalParent = byKey.get(HBPVocabulary.INFERENCE_OF);
             }
             NexusInstanceReference originalReference = null;
-            if (originalParent instanceof Map) {
-                String id = (String) ((Map) originalParent).get(JsonLdConsts.ID);
+            if (originalParent instanceof Map<?,?> map) {
+                String id = (String) map.get(JsonLdConsts.ID);
                 originalReference = NexusInstanceReference.createFromUrl(id);
             } else if (byKey.get(JsonLdConsts.ID) != null) {
                 originalReference = NexusInstanceReference.createFromUrl((String) byKey.get(JsonLdConsts.ID));

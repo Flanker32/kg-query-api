@@ -65,7 +65,7 @@ public class SystemOidcHeaderInterceptor implements ClientHttpRequestInterceptor
     @Override
     public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] bytes, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
         if(httpRequest.getMethod()!= HttpMethod.GET) {
-            logger.info(String.format("%s to %s", httpRequest.getMethod().name(), httpRequest.getURI()));
+            logger.info("%s to %s".formatted(httpRequest.getMethod().name(), httpRequest.getURI()));
         }
         setAuthTokenToRequest(httpRequest);
         httpRequest.getHeaders().setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));

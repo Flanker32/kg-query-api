@@ -24,16 +24,16 @@
 package org.humanbrainproject.knowledgegraph.query.entity;
 
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoundingBoxTest {
 
     BoundingBox boundingBox;
 
-    @Before
+    @BeforeEach
     public void setup(){
         boundingBox = TestObjectFactory.createBoundingBox();
     }
@@ -97,15 +97,19 @@ public class BoundingBoxTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void parseBoundingBoxNOK() {
-        String boundingBoxString = "refSpace: 0, 0, 0, 10, 10";
-        BoundingBox.parseBoundingBox(boundingBoxString);
+        assertThrows(IllegalArgumentException.class, () -> {
+            String boundingBoxString = "refSpace: 0, 0, 0, 10, 10";
+            BoundingBox.parseBoundingBox(boundingBoxString);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void parseBoundingBoxWithoutReferenceSpaceNOK() {
-        String boundingBoxString = "0, 0, 0, 10, 10";
-        BoundingBox.parseBoundingBox(boundingBoxString);
+        assertThrows(IllegalArgumentException.class, () -> {
+            String boundingBoxString = "0, 0, 0, 10, 10";
+            BoundingBox.parseBoundingBox(boundingBoxString);
+        });
     }
 }

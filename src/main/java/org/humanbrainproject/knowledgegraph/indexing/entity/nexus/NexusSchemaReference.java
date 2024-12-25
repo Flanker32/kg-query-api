@@ -89,19 +89,19 @@ public class NexusSchemaReference {
     }
 
     public NexusRelativeUrl getRelativeUrlForOrganization() {
-        return new NexusRelativeUrl(NexusConfiguration.ResourceType.ORGANIZATION, String.format("%s%s", getOrganization(), subSpace != null ? subSpace.getPostFix() : ""));
+        return new NexusRelativeUrl(NexusConfiguration.ResourceType.ORGANIZATION, "%s%s".formatted(getOrganization(), subSpace != null ? subSpace.getPostFix() : ""));
     }
 
     public NexusRelativeUrl getRelativeUrlForDomain(){
-        return new NexusRelativeUrl(NexusConfiguration.ResourceType.DOMAIN, String.format("%s/%s", getRelativeUrlForOrganization().getUrl(), getDomain()));
+        return new NexusRelativeUrl(NexusConfiguration.ResourceType.DOMAIN, "%s/%s".formatted(getRelativeUrlForOrganization().getUrl(), getDomain()));
     }
 
     public NexusRelativeUrl getRelativeUrl() {
-        return new NexusRelativeUrl(NexusConfiguration.ResourceType.SCHEMA, String.format("%s/%s/%s", getRelativeUrlForDomain().getUrl(), getSchema(), getSchemaVersion()));
+        return new NexusRelativeUrl(NexusConfiguration.ResourceType.SCHEMA, "%s/%s/%s".formatted(getRelativeUrlForDomain().getUrl(), getSchema(), getSchemaVersion()));
     }
 
     public NexusRelativeUrl getRelativeUrlForContext() {
-        return new NexusRelativeUrl(NexusConfiguration.ResourceType.CONTEXT, String.format("%s/%s/%s", getRelativeUrlForDomain().getUrl(), getSchema(), getSchemaVersion()));
+        return new NexusRelativeUrl(NexusConfiguration.ResourceType.CONTEXT, "%s/%s/%s".formatted(getRelativeUrlForDomain().getUrl(), getSchema(), getSchemaVersion()));
     }
 
     static String extractMainOrganization(String organization) {
@@ -119,7 +119,7 @@ public class NexusSchemaReference {
     }
 
     public String createUniqueNamespace() {
-        return String.format("https://schema.hbp.eu/%s/%s/%s/%s/", organization, domain, schema, schemaVersion);
+        return "https://schema.hbp.eu/%s/%s/%s/%s/".formatted(organization, domain, schema, schemaVersion);
 
     }
 

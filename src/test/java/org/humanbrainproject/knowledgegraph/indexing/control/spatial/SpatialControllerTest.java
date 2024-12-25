@@ -27,18 +27,18 @@ import org.humanbrainproject.knowledgegraph.commons.solr.Solr;
 import org.humanbrainproject.knowledgegraph.indexing.entity.QualifiedIndexingMessage;
 import org.humanbrainproject.knowledgegraph.indexing.entity.todo.TodoList;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-@Ignore
+@Disabled
 public class SpatialControllerTest {
 
     SpatialController spatialController;
 
-    @Before
+    @BeforeEach
     public void setup(){
         this.spatialController = new SpatialController();
         this.spatialController.messageProcessor = TestObjectFactory.mockedMessageProcessor();

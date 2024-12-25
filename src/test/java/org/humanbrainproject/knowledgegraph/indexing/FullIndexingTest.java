@@ -42,21 +42,18 @@ import org.humanbrainproject.knowledgegraph.instances.control.InstanceManipulati
 import org.humanbrainproject.knowledgegraph.query.entity.JsonDocument;
 import org.humanbrainproject.knowledgegraph.releasing.control.ReleaseControl;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
-@Ignore("Integration test")
+@Disabled("Integration test")
 public class FullIndexingTest {
 
     @Autowired
@@ -82,7 +79,7 @@ public class FullIndexingTest {
     NexusInstanceReference instance;
 
 
-    @Before
+    @BeforeEach
     public void setup(){
         authorizationContext.setMasterCredential();
     }

@@ -24,8 +24,8 @@
 package org.humanbrainproject.knowledgegraph.commons.authorization.control;
 
 import org.humanbrainproject.knowledgegraph.commons.authorization.entity.OidcAccessToken;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
@@ -34,17 +34,17 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.mock.http.client.MockClientHttpRequest;
 import org.springframework.mock.http.client.MockClientHttpResponse;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OidcHeaderInterceptorTest {
 
     OidcAccessToken token;
 
-    @Before
+    @BeforeEach
     public void setup(){
         this.token = new OidcAccessToken().setToken("fooToken");
     }

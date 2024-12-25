@@ -25,8 +25,8 @@ package org.humanbrainproject.knowledgegraph.releasing.control;
 
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.control.ArangoRepository;
 import org.humanbrainproject.knowledgegraph.releasing.entity.ReleaseStatus;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class ReleaseControlTest {
         ReleaseStatus worstReleaseStatus = new ReleaseControl().findWorstReleaseStatusOfChildren(map, null, true);
 
         //The worst release state is RELEASED, because root is not taken into account
-        Assert.assertEquals(ReleaseStatus.RELEASED, worstReleaseStatus);
+        Assertions.assertEquals(ReleaseStatus.RELEASED, worstReleaseStatus);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ReleaseControlTest {
         ReleaseStatus worstReleaseStatus = new ReleaseControl().findWorstReleaseStatusOfChildren(map, null, true);
 
         //The worst release state is RELEASED, because root is not taken into account
-        Assert.assertEquals(ReleaseStatus.HAS_CHANGED, worstReleaseStatus);
+        Assertions.assertEquals(ReleaseStatus.HAS_CHANGED, worstReleaseStatus);
     }
 
     @Test
@@ -85,6 +85,6 @@ public class ReleaseControlTest {
 
         ReleaseStatus worstReleaseStatus = new ReleaseControl().findWorstReleaseStatusOfChildren(map, null, true);
 
-        Assert.assertEquals(ReleaseStatus.NOT_RELEASED, worstReleaseStatus);
+        Assertions.assertEquals(ReleaseStatus.NOT_RELEASED, worstReleaseStatus);
     }
 }

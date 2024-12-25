@@ -23,8 +23,8 @@
 
 package org.humanbrainproject.knowledgegraph.query.entity;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JsonDocumentTest {
 
@@ -35,7 +35,7 @@ public class JsonDocumentTest {
         document.addToProperty("bar", "foo");
         document.removeAllInternalKeys();
 
-        Assert.assertEquals(1, document.size());
-        Assert.assertEquals("foo", document.get("bar"));
+        Assertions.assertEquals(1, document.size());
+        Assertions.assertEquals("foo", document.get("bar"));
     }
 }

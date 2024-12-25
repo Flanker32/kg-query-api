@@ -72,7 +72,7 @@ public class ScopeTreeController {
 
     @Cacheable("scopeTree")
     public Map getScopeTree(NexusInstanceReference instanceReference, String queryId) {
-        logger.info(String.format("Finding scope for %s with the query %s", instanceReference.getRelativeUrl().getUrl(), queryId));
+        logger.info("Finding scope for %s with the query %s".formatted(instanceReference.getRelativeUrl().getUrl(), queryId));
         StoredQueryReference queryReference = new StoredQueryReference(instanceReference.getNexusSchema(), queryId);
         String payload = arangoInternalRepository.getInternalDocumentByKey(new ArangoDocumentReference(ArangoQuery.SPECIFICATION_QUERIES, queryReference.getName()), String.class);
         if (payload != null) {

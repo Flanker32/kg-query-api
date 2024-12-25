@@ -50,8 +50,8 @@ public abstract class KnownSemantic {
 
     protected NexusInstanceReference getReferenceForLinkedInstance(Object linkedInstance, boolean onlyHttp) {
         String result = null;
-        if (linkedInstance instanceof Map && ((Map) linkedInstance).containsKey(JsonLdConsts.ID)) {
-            Object resultObject = ((Map) linkedInstance).get(JsonLdConsts.ID);
+        if (linkedInstance instanceof Map<?,?> map && map.containsKey(JsonLdConsts.ID)) {
+            Object resultObject = map.get(JsonLdConsts.ID);
             if(resultObject!=null){
                 result = resultObject.toString();
             }
@@ -78,8 +78,8 @@ public abstract class KnownSemantic {
     protected List getValueListForProperty(Map map, String key){
         if(map.containsKey(key)) {
             Object value = map.get(key);
-            if (value instanceof List) {
-                return (List) value;
+            if (value instanceof List<?> list) {
+                return list;
             } else if(value!=null) {
                 return Collections.singletonList(value);
             } else{
@@ -90,8 +90,8 @@ public abstract class KnownSemantic {
     }
 
     protected List<NexusInstanceReference> getReferencesForLinkedInstances(Object element, boolean onlyHttp) {
-        if (element instanceof List) {
-            List<Object> releaseInstances = ((List<Object>) element);
+        if (element instanceof List<?> list) {
+            List<Object> releaseInstances = list;
             return releaseInstances.stream().map(i -> getReferenceForLinkedInstance(i, onlyHttp)).collect(Collectors.toList());
         } else {
             return Collections.singletonList(getReferenceForLinkedInstance(element, onlyHttp));

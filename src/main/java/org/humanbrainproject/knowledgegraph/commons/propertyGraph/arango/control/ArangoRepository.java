@@ -96,7 +96,7 @@ public class ArangoRepository {
         String query = queryFactory.queryForIdsWithProperty(ArangoVocabulary.NEXUS_RELATIVE_URL_WITH_REV, nexusInstanceReference.getFullId(true), collections, authorizationContext.getReadableOrganizations());
         List<List> result = query == null ? new ArrayList<>() : arangoConnection.getOrCreateDB().query(query, null, new AqlQueryOptions(), List.class).asListRemaining();
         if (result.size() == 1) {
-            return ((List<String>) result.get(0)).stream().filter(Objects::nonNull).map(id -> ArangoDocumentReference.fromId(id.toString())).collect(Collectors.toSet());
+            return ((List<String>) result.getFirst()).stream().filter(Objects::nonNull).map(id -> ArangoDocumentReference.fromId(id.toString())).collect(Collectors.toSet());
         }
         return new LinkedHashSet<>();
     }
@@ -187,7 +187,7 @@ public class ArangoRepository {
                 query.getFilter().restrictToIds(ids);
                 QueryResult<List<Map>> listQueryResult = arangoQuery.queryPropertyGraphByStoredSpecification(query);
                 allResults.addAll(listQueryResult.getResults());
-                logger.info(String.format("Collection %s has a explicit query - treat it differently", collection.getName()));
+                logger.info("Collection %s has a explicit query - treat it differently".formatted(collection.getName()));
             }
             else{
                 noExplicitQuery.addAll(documentReferences.get(collection));

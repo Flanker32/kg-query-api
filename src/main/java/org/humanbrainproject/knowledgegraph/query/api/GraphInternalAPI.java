@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.query.api;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.InternalApi;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
@@ -39,7 +39,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +48,7 @@ import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstant
 
 @RestController
 @RequestMapping(value = "/arango", produces = MediaType.APPLICATION_JSON)
-@Api(value="/arango", description = "The API for reflecting the knowledge graph")
+@Tag(name="/arango", description = "The API for reflecting the knowledge graph")
 @InternalApi
 @ToBeTested(easy = true)
 public class GraphInternalAPI {
@@ -75,7 +75,7 @@ public class GraphInternalAPI {
      */
     @Deprecated
     @GetMapping(value = "/graph/{"+ORG+"}/{"+DOMAIN+"}/{"+SCHEMA+"}/{"+VERSION+"}/{"+ID+"}", consumes = { MediaType.WILDCARD})
-    public ResponseEntity<Map> getGraph(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @RequestParam(value= "step", required = false, defaultValue = "2") Integer step, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<Map> getGraph(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @RequestParam(required = false, defaultValue = "2") Integer step, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         try{
             authorizationContext.populateAuthorizationContext(authorization);
 
@@ -88,7 +88,7 @@ public class GraphInternalAPI {
     }
 
     @GetMapping(value = "/instances/{"+ORG+"}/{"+DOMAIN+"}/{"+SCHEMA+"}/{"+VERSION+"}", consumes = { MediaType.WILDCARD})
-    public ResponseEntity<Map> getInstanceList(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(value = "from", required = false, defaultValue = "0") Integer from, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) throws Exception{
+    public ResponseEntity<Map> getInstanceList(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(required = false, defaultValue = "0") Integer from, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) throws Exception{
         authorizationContext.populateAuthorizationContext(authorization);
         try{
             NexusSchemaReference schemaReference = new NexusSchemaReference(org, domain, schema, version);
@@ -135,7 +135,7 @@ public class GraphInternalAPI {
     }
 
     @GetMapping(value = "/bookmarks/{"+ORG+"}/{"+DOMAIN+"}/{"+SCHEMA+"}/{"+VERSION+"}/{"+ID+"}", consumes = { MediaType.WILDCARD})
-    public ResponseEntity<Map> getBookmarks(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(value = "from", required = false, defaultValue = "0") Integer from, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<Map> getBookmarks(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(required = false, defaultValue = "0") Integer from, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         authorizationContext.populateAuthorizationContext(authorization);
         try{
             NexusInstanceReference instanceReference = new NexusInstanceReference(org, domain, schema, version, id);

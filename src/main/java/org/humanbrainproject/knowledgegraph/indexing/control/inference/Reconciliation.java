@@ -131,7 +131,7 @@ public class Reconciliation implements InferenceStrategy, InitializingBean {
             if (inferredInstances.size() == 1) {
                 return inferredInstances.iterator().next().clone();
             } else {
-                throw new InferenceException(String.format("Multiple inferred entities for the original entity %s", original.getFullId(true)));
+                throw new InferenceException("Multiple inferred entities for the original entity %s".formatted(original.getFullId(true)));
             }
         } else {
             //There is no inferred instance yet - so we create a new one.
@@ -237,13 +237,13 @@ public class Reconciliation implements InferenceStrategy, InitializingBean {
         Map qualifiedMap = vertex.getQualifiedIndexingMessage().getQualifiedMap();
         Object fieldUpdates = qualifiedMap.get(HBPVocabulary.PROVENANCE_FIELD_UPDATES);
         //Fallback logic since update times got introduced later, we have to check if it's there. If not, we fall back to the modification date of the underlying document.
-        if(fieldUpdates instanceof Map && ((Map)fieldUpdates).get(property) instanceof String){
-            return LocalDateTime.parse((String)((Map)fieldUpdates).get(property), DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        if(fieldUpdates instanceof Map<?,?> map && ((Map)fieldUpdates).get(property) instanceof String){
+            return LocalDateTime.parse((String)map.get(property), DateTimeFormatter.ISO_ZONED_DATE_TIME);
         }
         else {
             Object indexedAt = qualifiedMap.get(HBPVocabulary.PROVENANCE_MODIFIED_AT);
-            if (indexedAt instanceof String) {
-                return LocalDateTime.parse((String) indexedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            if (indexedAt instanceof String string) {
+                return LocalDateTime.parse(string, DateTimeFormatter.ISO_ZONED_DATE_TIME);
             }
         }
         return null;

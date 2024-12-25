@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.nexus.entity;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class FileStructureUploaderTest {
         try {
             ErrorsAndSuccess<List<String>> ss = fu.withRetry(4, s, function, false);
             assert ss.errors.size() == 1;
-            assert ss.errors.get(0).equals(result);
+            assert ss.errors.getFirst().equals(result);
         } catch (InterruptedException e){
             assert false;
         }

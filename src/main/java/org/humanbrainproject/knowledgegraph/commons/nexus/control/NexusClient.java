@@ -80,7 +80,7 @@ public class NexusClient {
     private RestTemplate createRestTemplate(ClientHttpRequestInterceptor oidc){
         RestTemplate template = new RestTemplate();
         template.setInterceptors(Collections.singletonList(oidc));
-        template.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        template.getMessageConverters().addFirst(new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return template;
     }
 
@@ -114,7 +114,7 @@ public class NexusClient {
 
     public JsonDocument put(NexusRelativeUrl url, Integer revision, Map payload, ClientHttpRequestInterceptor oidc) throws HttpClientErrorException {
         try {
-            ResponseEntity<Map> result = createRestTemplate(oidc).exchange(String.format("%s%s", configuration.getEndpoint(url), revision != null ? String.format("%srev=%d", !url.getUrl().contains("?") ? "?" : "&", revision) : ""), HttpMethod.PUT, new HttpEntity<>(payload), Map.class);
+            ResponseEntity<Map> result = createRestTemplate(oidc).exchange("%s%s".formatted(configuration.getEndpoint(url), revision != null ? "%srev=%d".formatted(!url.getUrl().contains("?") ? "?" : "&", revision) : ""), HttpMethod.PUT, new HttpEntity<>(payload), Map.class);
             if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
                 return new JsonDocument(result.getBody());
             }
@@ -138,7 +138,7 @@ public class NexusClient {
             }
         }
         try {
-            createRestTemplate(oidc).delete(String.format("%s%s", configuration.getEndpoint(url), revision != null ? String.format("%srev=%d", !url.getUrl().contains("?") ? "?" : "&", revision) : ""));
+            createRestTemplate(oidc).delete("%s%s".formatted(configuration.getEndpoint(url), revision != null ? "%srev=%d".formatted(!url.getUrl().contains("?") ? "?" : "&", revision) : ""));
             return true;
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.CONFLICT) {
@@ -159,7 +159,7 @@ public class NexusClient {
 
     public JsonDocument post(NexusRelativeUrl url, Integer revision, Map payload, ClientHttpRequestInterceptor oidc) {
         try {
-            ResponseEntity<Map> result = createRestTemplate(oidc).exchange(String.format("%s%s", configuration.getEndpoint(url), revision != null ? String.format("%srev=%d", !url.getUrl().contains("?") ? "?" : "&", revision) : ""), HttpMethod.POST, new HttpEntity<>(payload), Map.class);
+            ResponseEntity<Map> result = createRestTemplate(oidc).exchange("%s%s".formatted(configuration.getEndpoint(url), revision != null ? "%srev=%d".formatted(!url.getUrl().contains("?") ? "?" : "&", revision) : ""), HttpMethod.POST, new HttpEntity<>(payload), Map.class);
             if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
                 return new JsonDocument(result.getBody());
             }
@@ -178,7 +178,7 @@ public class NexusClient {
     JsonDocument patch(NexusRelativeUrl url, Integer revision, Map payload, ClientHttpRequestInterceptor oidc) {
         RestTemplate template = createRestTemplate(oidc);
         template.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        ResponseEntity<Map> result = template.exchange(String.format("%s%s", configuration.getEndpoint(url), revision != null ? String.format("%srev=%d", !url.getUrl().contains("?") ? "?" : "&", revision) : ""), HttpMethod.PATCH, new HttpEntity<>(payload), Map.class);
+        ResponseEntity<Map> result = template.exchange("%s%s".formatted(configuration.getEndpoint(url), revision != null ? "%srev=%d".formatted(!url.getUrl().contains("?") ? "?" : "&", revision) : ""), HttpMethod.PATCH, new HttpEntity<>(payload), Map.class);
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
             return new JsonDocument(result.getBody());
         }
@@ -193,7 +193,7 @@ public class NexusClient {
         NexusRelativeUrl relativeUrl = new NexusRelativeUrl(NexusConfiguration.ResourceType.DATA, nexusSchemaReference.getRelativeUrl().getUrl());
         relativeUrl.addQueryParameter("fields", "all");
         relativeUrl.addQueryParameter("deprecated", "false");
-        relativeUrl.addQueryParameter("filter", String.format("{\"op\":\"eq\",\"path\":\"%s\",\"value\":\"%s\"}", fieldName, fieldValue));
+        relativeUrl.addQueryParameter("filter", "{\"op\":\"eq\",\"path\":\"%s\",\"value\":\"%s\"}".formatted(fieldName, fieldValue));
         String url = configuration.getEndpoint(relativeUrl);
         ResponseEntity<Map> result = createRestTemplate(oidc).getForEntity(url, Map.class);
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null && result.getBody().containsKey("results") && result.getBody().get("results") instanceof List) {
@@ -270,10 +270,10 @@ public class NexusClient {
             consumer.accept(results.stream().map(r -> NexusInstanceReference.createFromUrl((String)r.get("resultId"))).collect(Collectors.toList()));
             if (followPages) {
                 Object links = result.getBody().get("links");
-                if (links instanceof Map) {
-                    Object next = ((Map) links).get("next");
-                    if (next instanceof String) {
-                        consume((String)next, oidc, true, consumer);
+                if (links instanceof Map<?,?> map) {
+                    Object next = map.get("next");
+                    if (next instanceof String string) {
+                        consume(string, oidc, true, consumer);
                     }
                 }
             }
@@ -287,10 +287,10 @@ public class NexusClient {
             List<JsonDocument> results = (List<JsonDocument>) ((List) result.getBody().get("results")).stream().map(r -> new JsonDocument((Map) r)).collect(Collectors.toList());
             if (followPages) {
                 Object links = result.getBody().get("links");
-                if (links instanceof Map) {
-                    Object next = ((Map) links).get("next");
-                    if (next instanceof String) {
-                        List<JsonDocument> nextPage = list((String)next, oidc, true);
+                if (links instanceof Map<?,?> map) {
+                    Object next = map.get("next");
+                    if (next instanceof String string) {
+                        List<JsonDocument> nextPage = list(string, oidc, true);
                         results.addAll(nextPage);
                     }
                 }

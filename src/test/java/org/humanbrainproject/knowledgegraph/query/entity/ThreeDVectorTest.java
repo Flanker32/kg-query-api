@@ -23,11 +23,11 @@
 
 package org.humanbrainproject.knowledgegraph.query.entity;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ThreeDVectorTest {
 
@@ -67,9 +67,9 @@ public class ThreeDVectorTest {
         List<ThreeDVector> parse = ThreeDVector.parse("0,1,2,3,4,5");
 
         assertEquals(2, parse.size());
-        assertTrue(parse.get(0).getX() == 0);
-        assertTrue(parse.get(0).getY() == 1);
-        assertTrue(parse.get(0).getZ() == 2);
+        assertTrue(parse.getFirst().getX() == 0);
+        assertTrue(parse.getFirst().getY() == 1);
+        assertTrue(parse.getFirst().getZ() == 2);
         assertTrue(parse.get(1).getX() == 3);
         assertTrue(parse.get(1).getY() == 4);
         assertTrue(parse.get(1).getZ() == 5);
@@ -81,17 +81,17 @@ public class ThreeDVectorTest {
     public void parseIncomplete() {
         List<ThreeDVector> parse = ThreeDVector.parse("0,1,2,3,4");
         assertEquals(1, parse.size());
-        assertTrue(parse.get(0).getX() == 0);
-        assertTrue(parse.get(0).getY() == 1);
-        assertTrue(parse.get(0).getZ() == 2);
+        assertTrue(parse.getFirst().getX() == 0);
+        assertTrue(parse.getFirst().getY() == 1);
+        assertTrue(parse.getFirst().getZ() == 2);
     }
 
     @Test
     public void parseWithCharacters() {
         List<ThreeDVector> parse = ThreeDVector.parse("0,ads1 ,dsf2sdf");
         assertEquals(1, parse.size());
-        assertTrue(parse.get(0).getX() == 0);
-        assertTrue(parse.get(0).getY() == 1);
-        assertTrue(parse.get(0).getZ() == 2);
+        assertTrue(parse.getFirst().getX() == 0);
+        assertTrue(parse.getFirst().getY() == 1);
+        assertTrue(parse.getFirst().getZ() == 2);
     }
 }

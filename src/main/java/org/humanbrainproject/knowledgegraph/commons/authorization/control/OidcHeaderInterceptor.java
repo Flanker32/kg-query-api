@@ -34,7 +34,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -60,7 +60,7 @@ public class OidcHeaderInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] bytes, ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
         if(httpRequest.getMethod()!= HttpMethod.GET) {
-            logger.info(String.format("%s to %s", httpRequest.getMethod().name(), httpRequest.getURI()));
+            logger.info("%s to %s".formatted(httpRequest.getMethod().name(), httpRequest.getURI()));
         }
 
         httpRequest.getHeaders().setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));

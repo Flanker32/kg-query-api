@@ -32,8 +32,8 @@ import org.humanbrainproject.knowledgegraph.query.entity.Pagination;
 import org.humanbrainproject.knowledgegraph.query.entity.SpecField;
 import org.humanbrainproject.knowledgegraph.query.entity.SpecTraverse;
 import org.humanbrainproject.knowledgegraph.query.entity.Specification;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class QueryBuilderNewTest {
 
     Map<String, String> parameters;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.pagination = new Pagination();
         this.pagination.setSize(25);

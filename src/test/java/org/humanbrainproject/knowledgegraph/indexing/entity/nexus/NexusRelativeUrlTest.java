@@ -24,15 +24,15 @@
 package org.humanbrainproject.knowledgegraph.indexing.entity.nexus;
 
 import org.humanbrainproject.knowledgegraph.commons.nexus.control.NexusConfiguration;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class NexusRelativeUrlTest {
 
     NexusRelativeUrl relativeUrl;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.relativeUrl = new NexusRelativeUrl(NexusConfiguration.ResourceType.DATA, "foo");
     }
@@ -41,7 +41,7 @@ public class NexusRelativeUrlTest {
     public void getUrl() {
         this.relativeUrl.addQueryParameter("foo", "bar");
         String url = this.relativeUrl.getUrl();
-        Assert.assertEquals("foo?&foo=bar", url);
+        Assertions.assertEquals("foo?&foo=bar", url);
 
     }
 }

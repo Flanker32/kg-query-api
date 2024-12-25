@@ -26,8 +26,8 @@ package org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.contro
 import org.humanbrainproject.knowledgegraph.commons.nexus.control.NexusConfiguration;
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.entity.ArangoCollectionReference;
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.entity.ArangoDocumentReference;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public class ArangoQueryFactoryTest {
     Set<String> permissionGroupsWithReadAccess = new HashSet<>(Arrays.asList("minds"));
     Set<ArangoCollectionReference> collections = Stream.of("schema_hbp_eu-minds-activity", "schema_hbp_eu-minds-specimen_group").map(ArangoCollectionReference::new).collect(Collectors.toSet());
     ArangoQueryFactory arangoQueryFactory;
-    @Before
+    @BeforeEach
     public void setup(){
         arangoQueryFactory = new ArangoQueryFactory();
         arangoQueryFactory.configuration = Mockito.spy(new NexusConfiguration());

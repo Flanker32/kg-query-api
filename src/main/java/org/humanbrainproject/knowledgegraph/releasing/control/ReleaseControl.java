@@ -105,8 +105,8 @@ public class ReleaseControl {
         Map document = arangoRepository.getDocument(arangoDocumentReference, databaseFactory.getInferredDB(false));
         if (document != null) {
             Object originalId = document.get(ArangoVocabulary.NEXUS_RELATIVE_URL_WITH_REV);
-            if (originalId instanceof String) {
-                return NexusInstanceReference.createFromUrl((String) originalId);
+            if (originalId instanceof String string) {
+                return NexusInstanceReference.createFromUrl(string);
             }
         }
         return null;
@@ -154,8 +154,8 @@ public class ReleaseControl {
         if (map.containsKey(JsonLdConsts.TYPE)) {
             Object types = map.get(JsonLdConsts.TYPE);
             Object relevantType = null;
-            if (types instanceof List && !((List) types).isEmpty()) {
-                relevantType = ((List) types).get(0);
+            if (types instanceof List<?> list && !list.isEmpty()) {
+                relevantType = list.getFirst();
             } else {
                 relevantType = types;
             }
@@ -185,8 +185,8 @@ public class ReleaseControl {
                 transformReleaseStatusMap((Map) map.get(key));
             } else if (map.get(key) instanceof Collection) {
                 for (Object o : ((Collection) map.get(key))) {
-                    if (o instanceof Map) {
-                        transformReleaseStatusMap((Map) o);
+                    if (o instanceof Map<?,?> map1) {
+                        transformReleaseStatusMap(map1);
                     }
                 }
             }
@@ -202,8 +202,8 @@ public class ReleaseControl {
             if (!isRoot) {
                 try {
                     Object status = map.get("status");
-                    if (status instanceof String) {
-                        ReleaseStatus releaseStatus = ReleaseStatus.valueOf((String) status);
+                    if (status instanceof String string) {
+                        ReleaseStatus releaseStatus = ReleaseStatus.valueOf(string);
                         if (releaseStatus.isWorst()) {
                             return releaseStatus;
                         }
@@ -212,15 +212,15 @@ public class ReleaseControl {
                         }
                     }
                 } catch (IllegalArgumentException e) {
-                    logger.error(String.format("Was not able to parse the status with the value %s", map.get("status")));
+                    logger.error("Was not able to parse the status with the value %s".formatted(map.get("status")));
                 }
             }
 
             Object children = map.get("children");
-            if (children instanceof List) {
-                for (Object o : ((List) children)) {
-                    if (o instanceof Map) {
-                        worstStatusSoFar = findWorstReleaseStatusOfChildren((Map) o, worstStatusSoFar, false);
+            if (children instanceof List<?> list) {
+                for (Object o : list) {
+                    if (o instanceof Map<?,?> map1) {
+                        worstStatusSoFar = findWorstReleaseStatusOfChildren(map1, worstStatusSoFar, false);
                         if (worstStatusSoFar.isWorst()) {
                             return worstStatusSoFar;
                         }

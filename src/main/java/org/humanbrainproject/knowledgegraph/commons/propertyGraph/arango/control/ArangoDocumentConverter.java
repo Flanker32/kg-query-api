@@ -64,7 +64,7 @@ public class ArangoDocumentConverter {
             path.put(ArangoVocabulary.NAME, step.getName());
         }
         if (remaining.size() > 0) {
-            path.put(ArangoVocabulary.NEXT, buildPath(remaining.get(0), remaining.subList(1, remaining.size())));
+            path.put(ArangoVocabulary.NEXT, buildPath(remaining.getFirst(), remaining.subList(1, remaining.size())));
         }
         return path;
     }
@@ -131,20 +131,20 @@ public class ArangoDocumentConverter {
 
     boolean removePathFromMap(Map map, List<Step> path) {
         if (path.size() == 1) {
-            map.remove(path.get(0).getName());
+            map.remove(path.getFirst().getName());
         } else if (path.size() > 1) {
-            Step nextStep = path.get(0);
+            Step nextStep = path.getFirst();
             Object object = map.get(nextStep.getName());
-            if (object instanceof Map) {
-                boolean fullyRemoved = removePathFromMap(((Map) object), path.subList(1, path.size()));
+            if (object instanceof Map<?,?> map1) {
+                boolean fullyRemoved = removePathFromMap(map1, path.subList(1, path.size()));
                 if(fullyRemoved){
                     map.remove(nextStep.getName());
                 }
-            } else if (object instanceof Collection) {
+            } else if (object instanceof Collection<?> collection) {
                 boolean allRemoved = true;
-                for (Object o : ((Collection) object)) {
-                    if (o instanceof Map) {
-                        boolean fullyRemoved = removePathFromMap(((Map) o), path.subList(1, path.size()));
+                for (Object o : collection) {
+                    if (o instanceof Map<?,?> map1) {
+                        boolean fullyRemoved = removePathFromMap(map1, path.subList(1, path.size()));
                         if(!fullyRemoved){
                             allRemoved = false;
                         }

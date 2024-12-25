@@ -85,8 +85,8 @@ public class JsonLdStandardization {
             List context = collectContextElements(input.get(JsonLdConsts.CONTEXT));
             boolean hasVocab = false;
             for (Object contextElement : context) {
-                if (contextElement instanceof Map) {
-                    if (((Map) contextElement).containsKey(JsonLdConsts.VOCAB)) {
+                if (contextElement instanceof Map<?,?> map) {
+                    if (map.containsKey(JsonLdConsts.VOCAB)) {
                         hasVocab = true;
                         break;
                     }
@@ -113,15 +113,15 @@ public class JsonLdStandardization {
      * @return
      */
     public <T> T flattenLists(T input, Map parent, String parentKey) {
-        if (input instanceof List) {
-            ((List) input).forEach(i -> flattenLists(i, parent, parentKey));
-        } else if (input instanceof Map) {
-            if (((Map) input).containsKey(JsonLdConsts.LIST)) {
-                Object list = ((Map) input).get(JsonLdConsts.LIST);
+        if (input instanceof List<?> list) {
+            list.forEach(i -> flattenLists(i, parent, parentKey));
+        } else if (input instanceof Map<?,?> map) {
+            if (map.containsKey(JsonLdConsts.LIST)) {
+                Object list = map.get(JsonLdConsts.LIST);
                 parent.put(parentKey, list);
             } else {
-                for (Object o : ((Map) input).keySet()) {
-                    flattenLists(((Map) input).get(o), (Map) input, (String) o);
+                for (Object o : map.keySet()) {
+                    flattenLists(map.get(o), map, (String) o);
                 }
             }
         }
@@ -134,11 +134,11 @@ public class JsonLdStandardization {
 
 
     public <T> T extendInternalReferencesWithRelativeUrl(T input, NexusInstanceReferenceTransformer transformer) {
-        if (input instanceof List) {
-            ((List) input).forEach(i -> extendInternalReferencesWithRelativeUrl(i, transformer));
-        } else if (input instanceof Map) {
-            if (((Map) input).containsKey(JsonLdConsts.ID)) {
-                String referencedId = (String) ((Map) input).get(JsonLdConsts.ID);
+        if (input instanceof List<?> list) {
+            list.forEach(i -> extendInternalReferencesWithRelativeUrl(i, transformer));
+        } else if (input instanceof Map<?,?> map) {
+            if (map.containsKey(JsonLdConsts.ID)) {
+                String referencedId = (String) map.get(JsonLdConsts.ID);
                 NexusInstanceReference fromUrl = NexusInstanceReference.createFromUrl(referencedId);
                 if (fromUrl != null) {
                     if (transformer != null) {
@@ -148,15 +148,15 @@ public class JsonLdStandardization {
                             fromUrl = transformed;
                             if (!fromUrl.getRelativeUrl().getUrl().equals(formerRelativeUrl)) {
                                 referencedId = referencedId.replace(formerRelativeUrl, fromUrl.getRelativeUrl().getUrl());
-                                ((Map) input).put(JsonLdConsts.ID, referencedId);
+                                map.put(JsonLdConsts.ID, referencedId);
                             }
                         }
                     }
-                    ((Map) input).put(HBPVocabulary.RELATIVE_URL_OF_INTERNAL_LINK, fromUrl.getRelativeUrl().getUrl());
+                    map.put(HBPVocabulary.RELATIVE_URL_OF_INTERNAL_LINK, fromUrl.getRelativeUrl().getUrl());
                 }
             }
-            for (Object o : ((Map) input).keySet()) {
-                extendInternalReferencesWithRelativeUrl(((Map) input).get(o), transformer);
+            for (Object o : map.keySet()) {
+                extendInternalReferencesWithRelativeUrl(map.get(o), transformer);
             }
         }
         return input;
@@ -164,21 +164,21 @@ public class JsonLdStandardization {
 
     public <T> T filterKeysByVocabBlacklists(T input) {
         List<String> blacklist = Arrays.asList(NexusVocabulary.NAMESPACE);
-        if (input instanceof List) {
-            ((List) input).forEach(this::filterKeysByVocabBlacklists);
-        } else if (input instanceof Map) {
-            Set keySet = new HashSet(((Map) input).keySet());
+        if (input instanceof List<?> list) {
+            list.forEach(this::filterKeysByVocabBlacklists);
+        } else if (input instanceof Map<?,?> map) {
+            Set keySet = new HashSet(map.keySet());
             for (Object key : keySet) {
                 boolean removed = false;
                 for (String filterSchema : blacklist) {
                     if (key.toString().startsWith(filterSchema)) {
                         removed = true;
-                        ((Map) input).remove(key);
+                        map.remove(key);
                         break;
                     }
                 }
                 if (!removed) {
-                    filterKeysByVocabBlacklists(((Map) input).get(input));
+                    filterKeysByVocabBlacklists(map.get(input));
                 }
             }
         }
@@ -260,16 +260,15 @@ public class JsonLdStandardization {
 
 
     private void handleVocab(Object context) {
-        if (context instanceof Map && ((Map) context).containsKey(JsonLdConsts.VOCAB)) {
-            Map ctx = ((Map) context);
+        if (context instanceof Map<?,?> map && map.containsKey(JsonLdConsts.VOCAB)) {
+            Map ctx = map;
             ctx.put("vocab", ctx.get(JsonLdConsts.VOCAB));
         }
     }
 
 
     private void applyKeyMap(Object object, Map keymapping) {
-        if (object instanceof Map) {
-            Map map = (Map) object;
+        if (object instanceof Map<?,?> map) {
             Set keys = new HashSet(map.keySet());
             for (Object key : keys) {
                 Object originalValue = map.get(key);
@@ -283,8 +282,8 @@ public class JsonLdStandardization {
                 }
             }
         }
-        if (object instanceof Collection) {
-            for (Object o : ((Collection) object)) {
+        if (object instanceof Collection<?> collection) {
+            for (Object o : collection) {
                 applyKeyMap(o, keymapping);
             }
         }
@@ -308,8 +307,7 @@ public class JsonLdStandardization {
 
 
     private List<Map<String, String>> getKeys(Object element, List<Map<String, String>> allKeys) {
-        if (element instanceof Map) {
-            Map map = (Map) element;
+        if (element instanceof Map<?,?> map) {
             for (Object k : map.keySet()) {
                 HashMap<String, String> m = new LinkedHashMap<>();
                 m.put(JsonLdConsts.ID, k.toString());
@@ -318,8 +316,8 @@ public class JsonLdStandardization {
                 getKeys(map.get(k), allKeys);
             }
         }
-        if (element instanceof Collection) {
-            for (Object o : ((Collection) element)) {
+        if (element instanceof Collection<?> collection) {
+            for (Object o : collection) {
                 getKeys(o, allKeys);
             }
         }
@@ -339,8 +337,8 @@ public class JsonLdStandardization {
     }
 
     private List collectContextElements(Object input) {
-        if (input instanceof List) {
-            return (List) input;
+        if (input instanceof List<?> list) {
+            return list;
         } else {
             List list = new ArrayList();
             if (input != null) {

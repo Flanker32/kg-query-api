@@ -110,10 +110,10 @@ public class Solr implements InitializingBean {
 
     private boolean checkNameListForValueExistance(String name, List<Object> fields) {
         for (Object type : fields) {
-            if (type instanceof List) {
-                for (Object o : ((List) type)) {
-                    if (o instanceof NamedList) {
-                        if (((NamedList) o).get("name").equals(name)) {
+            if (type instanceof List<?> list) {
+                for (Object o : list) {
+                    if (o instanceof NamedList<?> list) {
+                        if (list.get("name").equals(name)) {
                             return true;
                         }
                     }
@@ -183,8 +183,8 @@ public class Solr implements InitializingBean {
         NamedList<Object> coreAdminResponse = getSolr().request(coreAdminRequest);
         List<Object> status = coreAdminResponse.getAll("status");
         for (Object o : status) {
-            if (o instanceof NamedList) {
-                if (((NamedList) o).asMap(1).keySet().contains(solrCore)) {
+            if (o instanceof NamedList<?> list) {
+                if (list.asMap(1).keySet().contains(solrCore)) {
                     return true;
                 }
             }
@@ -202,7 +202,7 @@ public class Solr implements InitializingBean {
                     document.addField("c", p.toString());
                     try {
                         UpdateResponse response = solr.add(solrCore, document);
-                        logger.info(String.format("Indexed point %s for reference %s in space \"%s\" in Solr in %d ms", p.toString(), id, referenceSpace, response.getElapsedTime()));
+                        logger.info("Indexed point %s for reference %s in space \"%s\" in Solr in %d ms".formatted(p.toString(), id, referenceSpace, response.getElapsedTime()));
                     } catch (SolrServerException | IOException e) {
                         logger.error("Was not able to index document into Solr", e);
                     }
@@ -214,7 +214,7 @@ public class Solr implements InitializingBean {
     public void delete(String id, String referenceSpace)  {
         try {
             UpdateResponse response = solr.deleteByQuery(solrCore, "aid:" + id+" AND r:"+referenceSpace);
-            logger.info(String.format("Removed points for id %s in space \"%s\" in Solr in %d ms", id, referenceSpace, response.getElapsedTime()));
+            logger.info("Removed points for id %s in space \"%s\" in Solr in %d ms".formatted(id, referenceSpace, response.getElapsedTime()));
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
             logger.error("Was not able to remove document(s) in Solr", e);
@@ -230,8 +230,8 @@ public class Solr implements InitializingBean {
 
     public List<String> queryIdsOfMinimalBoundingBox(BoundingBox boundingBox) throws IOException, SolrServerException {
         SolrQuery query = new SolrQuery("*:*");
-        String coordinateQuery = String.format("c:[\"%s\" TO \"%s\"]", boundingBox.getFrom(), boundingBox.getTo());
-        String referenceSpaceQuery = String.format("r:\"%s\"", boundingBox.getReferenceSpace());
+        String coordinateQuery = "c:[\"%s\" TO \"%s\"]".formatted(boundingBox.getFrom(), boundingBox.getTo());
+        String referenceSpaceQuery = "r:\"%s\"".formatted(boundingBox.getReferenceSpace());
         query.setFilterQueries(coordinateQuery, referenceSpaceQuery);
         query.setFields("aid");
         query.setRows(0);
@@ -243,7 +243,7 @@ public class Solr implements InitializingBean {
         query.setRows(Long.valueOf(matches).intValue());
         query.setParam("group", true);
         query.setParam("group.field", "aid");
-        return query(query).getGroupResponse().getValues().get(0).getValues().stream().map(Group::getGroupValue).collect(Collectors.toList());
+        return query(query).getGroupResponse().getValues().getFirst().getValues().stream().map(Group::getGroupValue).collect(Collectors.toList());
     }
 
 

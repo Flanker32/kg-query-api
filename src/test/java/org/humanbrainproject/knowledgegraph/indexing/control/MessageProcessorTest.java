@@ -29,9 +29,9 @@ import org.humanbrainproject.knowledgegraph.commons.propertyGraph.entity.Vertex;
 import org.humanbrainproject.knowledgegraph.indexing.entity.IndexingMessage;
 import org.humanbrainproject.knowledgegraph.indexing.entity.QualifiedIndexingMessage;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class MessageProcessorTest {
@@ -40,7 +40,7 @@ public class MessageProcessorTest {
     JsonTransformer json = new JsonTransformer();
 
     MessageProcessor messageProcessor;
-    @Before
+    @BeforeEach
     public void setup(){
         messageProcessor  = new MessageProcessor();
         messageProcessor.configuration = Mockito.spy(new NexusConfiguration());
@@ -54,8 +54,8 @@ public class MessageProcessorTest {
         String payload = "{'http://test/foo': { '@id': 'http://test/foo/core/bar/v0.0.1/xy'}}";
         QualifiedIndexingMessage qualifiedIndexingMessage = new QualifiedIndexingMessage(new IndexingMessage(TestObjectFactory.fooInstanceReference(), payload, null, null), json.parseToMap(payload));
         Vertex vertexStructure = messageProcessor.createVertexStructure(qualifiedIndexingMessage);
-        Assert.assertEquals(1, vertexStructure.getEdges().size());
-        Assert.assertEquals("foo/core/bar/v0.0.1/xy", vertexStructure.getEdges().get(0).getReference().getRelativeUrl().getUrl());
+        Assertions.assertEquals(1, vertexStructure.getEdges().size());
+        Assertions.assertEquals("foo/core/bar/v0.0.1/xy", vertexStructure.getEdges().getFirst().getReference().getRelativeUrl().getUrl());
     }
 
     @Test
@@ -63,9 +63,9 @@ public class MessageProcessorTest {
         String payload = "{'http://test/foo': [{ '@id': 'http://test/foo/core/bar/v0.0.1/xy'}, { '@id': 'http://test/foo/core/bar/v0.0.1/abc'}]}";
         QualifiedIndexingMessage qualifiedIndexingMessage = new QualifiedIndexingMessage(new IndexingMessage(TestObjectFactory.fooInstanceReference(), payload, null, null), json.parseToMap(payload));
         Vertex vertexStructure = messageProcessor.createVertexStructure(qualifiedIndexingMessage);
-        Assert.assertEquals(2, vertexStructure.getEdges().size());
-        Assert.assertEquals("foo/core/bar/v0.0.1/xy", vertexStructure.getEdges().get(0).getReference().getRelativeUrl().getUrl());
-        Assert.assertEquals("foo/core/bar/v0.0.1/abc", vertexStructure.getEdges().get(1).getReference().getRelativeUrl().getUrl());
+        Assertions.assertEquals(2, vertexStructure.getEdges().size());
+        Assertions.assertEquals("foo/core/bar/v0.0.1/xy", vertexStructure.getEdges().getFirst().getReference().getRelativeUrl().getUrl());
+        Assertions.assertEquals("foo/core/bar/v0.0.1/abc", vertexStructure.getEdges().get(1).getReference().getRelativeUrl().getUrl());
 
     }
 }

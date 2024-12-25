@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -100,7 +100,7 @@ public class ArangoInternalRepository {
                         throw new IllegalAccessException("You've tried to update an already existing specification which was not created by yourself");
                     }
                 } catch (ArangoDBException dbexception) {
-                    logger.error(String.format("Was not able to update document: %s in database %s", document.getId(), db.name()), dbexception);
+                    logger.error("Was not able to update document: %s in database %s".formatted(document.getId(), db.name()), dbexception);
                     throw dbexception;
                 }
                 collection.updateDocument(document.getKey(), documentPayload);
@@ -112,7 +112,7 @@ public class ArangoInternalRepository {
                     logger.info("Inserted document: {} in database {}", document.getId(), db.name());
                     logger.debug("Payload of document {} in database {}: {}", document.getId(), db.name(), documentPayload);
                 } catch (ArangoDBException dbexception) {
-                    logger.error(String.format("Was not able to insert document: %s in database %s", document.getId(), db.name()), dbexception);
+                    logger.error("Was not able to insert document: %s in database %s".formatted(document.getId(), db.name()), dbexception);
                     throw dbexception;
                 }
             }

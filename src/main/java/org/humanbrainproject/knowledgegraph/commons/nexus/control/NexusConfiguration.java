@@ -62,7 +62,7 @@ public class NexusConfiguration {
     }
 
     public String getUserInfoEndpoint(){
-        return String.format("%s/v0/oauth2/userinfo", iamEndpoint);
+        return "%s/v0/oauth2/userinfo".formatted(iamEndpoint);
     }
 
 
@@ -74,23 +74,23 @@ public class NexusConfiguration {
     }
 
     public String getNexusBase(ResourceType resourceType){
-        return String.format("%s/v0/%s", getNexusBase(), resourceType.urlDeclaration);
+        return "%s/v0/%s".formatted(getNexusBase(), resourceType.urlDeclaration);
     }
 
     public String getEndpoint(ResourceType resourceType){
-        return String.format("%s/v0/%s", getNexusEndpoint(), resourceType.urlDeclaration);
+        return "%s/v0/%s".formatted(getNexusEndpoint(), resourceType.urlDeclaration);
     }
 
     public String getEndpoint(NexusRelativeUrl relativeUrl) {
-        return String.format("%s%s", getEndpoint(relativeUrl.getResourceType()), relativeUrl.getUrl() != null ? String.format("/%s", relativeUrl.getUrl()) : "");
+        return "%s%s".formatted(getEndpoint(relativeUrl.getResourceType()), relativeUrl.getUrl() != null ? "/%s".formatted(relativeUrl.getUrl()) : "");
     }
 
     public String getAbsoluteUrl(NexusSchemaReference schemaReference){
-        return String.format("%s%s", getNexusBase(schemaReference.getRelativeUrl().getResourceType()), schemaReference.getRelativeUrl().getUrl() != null ? String.format("/%s", schemaReference.getRelativeUrl().getUrl()) : "");
+        return "%s%s".formatted(getNexusBase(schemaReference.getRelativeUrl().getResourceType()), schemaReference.getRelativeUrl().getUrl() != null ? "/%s".formatted(schemaReference.getRelativeUrl().getUrl()) : "");
     }
 
     public String getAbsoluteUrl(NexusInstanceReference instanceReference) {
-        return String.format("%s%s", getNexusBase(instanceReference.getRelativeUrl().getResourceType()), instanceReference.getRelativeUrl().getUrl() != null ? String.format("/%s", instanceReference.getRelativeUrl().getUrl()) : "");
+        return "%s%s".formatted(getNexusBase(instanceReference.getRelativeUrl().getResourceType()), instanceReference.getRelativeUrl().getUrl() != null ? "/%s".formatted(instanceReference.getRelativeUrl().getUrl()) : "");
     }
 
 }

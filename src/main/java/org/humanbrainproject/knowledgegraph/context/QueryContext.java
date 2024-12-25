@@ -109,7 +109,7 @@ public class QueryContext {
             return getDatabase().query(aqlQuery, bindParameters, options, returnType);
         }
         catch(ArangoDBException ex){
-            logger.error(String.format("Was not able to execute the query: \n%s", aqlQuery), ex);
+            logger.error("Was not able to execute the query: \n%s".formatted(aqlQuery), ex);
             throw ex;
         }
     }

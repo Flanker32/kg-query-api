@@ -70,8 +70,8 @@ public class ShaclResolver {
         Object imports = qualifiedDoc.get(OWL_NAMESPACE+"imports");
         if(imports!=null){
             List<Map> importList;
-            if(imports instanceof List){
-                importList = (List)imports;
+            if(imports instanceof List<?> list){
+                importList = list;
             }
             else{
                 importList = Collections.singletonList((Map)imports);

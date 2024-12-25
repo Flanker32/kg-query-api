@@ -24,20 +24,22 @@
 package org.humanbrainproject.knowledgegraph.nexus.entity;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class FileStructureDataTest {
     private void createFile(String directory, String fileName) throws IOException{
-        Path path = Paths.get(directory);
+        Path path = Path.of(directory);
         Files.createDirectories(path);
         String fileContent = "Hello world";
-        Path filePath = Paths.get(directory + "/" +fileName);
+        Path filePath = Path.of(directory + "/" +fileName);
         if(!filePath.toFile().exists()){
             Files.createFile(filePath);
         }
@@ -77,19 +79,19 @@ public class FileStructureDataTest {
         String zipDirectory = "/tmp/zip";
         try {
             createFile(directory, fileName);
-            Path outputFile = Paths.get(zipDirectory + "/" + zipFileName);
-            Files.createDirectories(Paths.get(zipDirectory));
-            zipFolder(Paths.get(directory).toFile(), outputFile.toFile());
+            Path outputFile = Path.of(zipDirectory + "/" + zipFileName);
+            Files.createDirectories(Path.of(zipDirectory));
+            zipFolder(Path.of(directory).toFile(), outputFile.toFile());
             FileInputStream fStream = new FileInputStream(outputFile.toFile());
             FileStructureData fs = new FileStructureData(new ZipInputStream(fStream));
             File[] files = fs.listFiles();
             assert files.length == 1;
             fs.cleanData();
         } finally {
-            Files.deleteIfExists(Paths.get(directory + "/" + fileName));
-            Files.deleteIfExists(Paths.get(zipDirectory + "/" + zipFileName));
-            Files.deleteIfExists(Paths.get(directory));
-            Files.deleteIfExists(Paths.get(zipDirectory));
+            Files.deleteIfExists(Path.of(directory + "/" + fileName));
+            Files.deleteIfExists(Path.of(zipDirectory + "/" + zipFileName));
+            Files.deleteIfExists(Path.of(directory));
+            Files.deleteIfExists(Path.of(zipDirectory));
         }
     }
 }

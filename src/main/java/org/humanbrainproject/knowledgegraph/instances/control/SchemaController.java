@@ -89,7 +89,7 @@ public class SchemaController {
             }
             if (nexusClient.get(nexusSchemaReference.getRelativeUrlForDomain(), credential, Map.class) == null) {
                 Map<String, String> payload = new LinkedHashMap<>();
-                payload.put("description", String.format("The domain %s for organization %s", nexusSchemaReference.getDomain(), nexusSchemaReference.getOrganization()));
+                payload.put("description", "The domain %s for organization %s".formatted(nexusSchemaReference.getDomain(), nexusSchemaReference.getOrganization()));
                 nexusClient.put(nexusSchemaReference.getRelativeUrlForDomain(), null, payload, credential);
             }
             nexusClient.put(nexusSchemaReference.getRelativeUrl(), null, schemaPayload, credential);
@@ -108,7 +108,7 @@ public class SchemaController {
     private void publishSchema(NexusSchemaReference nexusSchemaReference, Integer revision, Credential credential) {
         Map<String, Boolean> payload = new LinkedHashMap<>();
         payload.put("published", true);
-        nexusClient.patch(new NexusRelativeUrl(NexusConfiguration.ResourceType.SCHEMA, String.format("%s/config", nexusSchemaReference.getRelativeUrl().getUrl())), revision, payload, credential);
+        nexusClient.patch(new NexusRelativeUrl(NexusConfiguration.ResourceType.SCHEMA, "%s/config".formatted(nexusSchemaReference.getRelativeUrl().getUrl())), revision, payload, credential);
     }
 
 
@@ -123,11 +123,11 @@ public class SchemaController {
     }
 
     String getOrganization(NexusSchemaReference schemaReference) {
-        return String.format("%s%s/", HBPVocabulary.NAMESPACE, schemaReference.getOrganization());
+        return "%s%s/".formatted(HBPVocabulary.NAMESPACE, schemaReference.getOrganization());
     }
 
     public String getTargetClass(NexusSchemaReference schemaReference) {
-        return String.format("%s%s", getOrganization(schemaReference), StringUtils.capitalize(schemaReference.getSchema()));
+        return "%s%s".formatted(getOrganization(schemaReference), StringUtils.capitalize(schemaReference.getSchema()));
     }
 
 
@@ -136,7 +136,7 @@ public class SchemaController {
         schema.put(JsonLdConsts.CONTEXT, getDefaultContextPayload());
         Map<String, Object> shape = new LinkedHashMap<>();
         String organization = getOrganization(schemaReference);
-        shape.put(JsonLdConsts.ID, String.format("%s%sShape", organization, StringUtils.capitalize(schemaReference.getSchema())));
+        shape.put(JsonLdConsts.ID, "%s%sShape".formatted(organization, StringUtils.capitalize(schemaReference.getSchema())));
         shape.put(JsonLdConsts.TYPE, ShaclVocabulary.NODE_SHAPE_ALIAS);
         Map<String, String> identifierProperty = new LinkedHashMap<>();
         identifierProperty.put("datatype", XSDVocabulary.STRING_ALIAS);

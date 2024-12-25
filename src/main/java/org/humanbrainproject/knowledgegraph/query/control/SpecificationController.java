@@ -85,7 +85,7 @@ public class SpecificationController {
             SpecField fieldToBeProcessed = specField;
             if(fieldToBeProcessed.isMerge() && fieldToBeProcessed.hasSubFields()){
                 //The field specifications are duplicated during specification parsing for merged fields. It's therefore safe to just follow the first path and take it as a placeholder for the overall field.
-                fieldToBeProcessed = fieldToBeProcessed.fields.get(0);
+                fieldToBeProcessed = fieldToBeProcessed.fields.getFirst();
             }
             if(fieldToBeProcessed.hasSubFields()){
                 if(fieldToBeProcessed.hasGrouping()){
@@ -119,7 +119,7 @@ public class SpecificationController {
         if(results==null || results.isEmpty()){
             return null;
         }
-        return results.get(0);
+        return results.getFirst();
     }
 
     public Map releaseTreeBySpecification(Specification spec, Query query, NexusInstanceReference instanceReference, TreeScope scope) throws JSONException {
@@ -132,7 +132,7 @@ public class SpecificationController {
         if(results==null || results.isEmpty()){
             return null;
         }
-        return results.get(0);
+        return results.getFirst();
     }
 
 

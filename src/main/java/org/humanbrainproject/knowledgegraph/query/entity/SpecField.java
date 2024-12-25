@@ -100,7 +100,7 @@ public class SpecField {
     }
 
     public SpecTraverse getFirstTraversal(){
-        return !traversePath.isEmpty() ? traversePath.get(0) : null;
+        return !traversePath.isEmpty() ? traversePath.getFirst() : null;
     }
 
     public List<SpecTraverse> getAdditionalDirectTraversals(){
@@ -115,7 +115,7 @@ public class SpecField {
 
     public SpecTraverse getLeafPath(){
         if(isLeaf() && !traversePath.isEmpty()){
-            return traversePath.get(traversePath.size()-1);
+            return traversePath.getLast();
         }
         return null;
     }

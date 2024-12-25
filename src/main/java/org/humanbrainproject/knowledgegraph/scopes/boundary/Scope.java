@@ -73,8 +73,8 @@ public class Scope {
     }
 
     public Set<String> getIdWhitelistForUser(String query, Credential credential){
-        if(credential instanceof OidcAccessToken) {
-            UserInformation userInfo = oidcClient.getUserInfo((OidcAccessToken)credential);
+        if(credential instanceof OidcAccessToken token) {
+            UserInformation userInfo = oidcClient.getUserInfo(token);
             UserByName user = userController.findUniqueInstance(Collections.singletonList(new EqualsFilter(UserByName.USER_NAME_FIELD, userInfo.getUserName())), UserByName.STRUCTURE, true);
             Set<NexusInstanceReference> invitations = user==null ? null : invitationController.getInvitations(user);
             if (invitations != null && !invitations.isEmpty()) {

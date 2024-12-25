@@ -97,7 +97,7 @@ public class InstanceManipulationController {
             Object indexedAt = payload.get(HBPVocabulary.PROVENANCE_MODIFIED_AT);
             LocalDateTime.parse((String) indexedAt, DateTimeFormatter.ISO_ZONED_DATE_TIME);
         } catch (DateTimeParseException d)  {
-            throw new RuntimeException(String.format("Could not parse update timestamp for instance: %s", originalId.toString() ));
+            throw new RuntimeException("Could not parse update timestamp for instance: %s".formatted(originalId.toString()));
         }
         JsonDocument instance = arangoNativeRepository.getInstance(ArangoDocumentReference.fromNexusInstance(originalId));
         if (instance == null) {
@@ -110,10 +110,10 @@ public class InstanceManipulationController {
         if (primaryIdentifier == null) {
             if (clientIdExtension == null && authorizationContext.getSubspace() == originalId.getSubspace()) {
                 //It's a replacement of the original instance - we therefore should be able to insert the data even without identifier mapping
-                logger.warn(String.format("Found instance without identifier: %s - since it was an update for the original resource, I can continue - but please check what is happening here!", instanceReference.getRelativeUrl().getUrl()));
+                logger.warn("Found instance without identifier: %s - since it was an update for the original resource, I can continue - but please check what is happening here!".formatted(instanceReference.getRelativeUrl().getUrl()));
                 return createInstanceByNexusId(nexusSchema, originalId.getId(), instanceReference.getRevision() != null ? instanceReference.getRevision() : 1, document, clientIdExtension);
             } else {
-                throw new RuntimeException(String.format("Found instance without identifier: %s", instanceReference.getRelativeUrl().getUrl()));
+                throw new RuntimeException("Found instance without identifier: %s".formatted(instanceReference.getRelativeUrl().getUrl()));
             }
         }
         if (clientIdExtension != null || (authorizationContext.getSubspace() != originalId.getSubspace())) {
@@ -232,9 +232,9 @@ public class InstanceManipulationController {
         String targetClass = schemaController.getTargetClass(nexusSchemaReference);
         if (type == null) {
             payload.put(JsonLdConsts.TYPE, targetClass);
-        } else if (type instanceof Collection) {
-            if (!((Collection) type).contains(targetClass)) {
-                ((Collection) type).add(targetClass);
+        } else if (type instanceof Collection<?> collection) {
+            if (!collection.contains(targetClass)) {
+                collection.add(targetClass);
             }
         } else if (!type.equals(targetClass)) {
             payload.put(JsonLdConsts.TYPE, Arrays.asList(type, targetClass));

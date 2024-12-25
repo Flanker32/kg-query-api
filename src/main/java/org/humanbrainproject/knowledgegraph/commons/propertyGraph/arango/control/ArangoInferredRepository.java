@@ -194,7 +194,7 @@ public class ArangoInferredRepository {
         if(l.isEmpty()){
             return null;
         }else{
-            return l.get(0);
+            return l.getFirst();
         }
     }
 
@@ -211,7 +211,7 @@ public class ArangoInferredRepository {
         if(l.isEmpty()){
             return null;
         }else{
-            return l.get(0);
+            return l.getFirst();
         }
     }
 

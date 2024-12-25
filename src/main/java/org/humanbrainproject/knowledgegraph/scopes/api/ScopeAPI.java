@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.scopes.api;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
 import org.humanbrainproject.knowledgegraph.commons.authorization.entity.OidcAccessToken;
@@ -38,14 +38,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.util.Set;
 
 import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstants.*;
 
 @RestController
 @RequestMapping(value = "/api/scopes", produces = MediaType.APPLICATION_JSON)
-@Api(value = "/api/scopes")
+@Tag(name = "/api/scopes")
 @ToBeTested(easy = true)
 public class ScopeAPI {
 
@@ -75,7 +75,7 @@ public class ScopeAPI {
     }
 
     @PutMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + ID + "}/{userName}")
-    public ResponseEntity<Void> createInvitation(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @PathVariable("userName") String userName, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<Void> createInvitation(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @PathVariable String userName, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         try {
             authorizationContext.setCredential(authorization);
             this.scope.addScopeToUser(new NexusInstanceReference(new NexusSchemaReference(org, domain, schema, version), id), userName);
@@ -88,7 +88,7 @@ public class ScopeAPI {
     }
 
     @DeleteMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + ID + "}/{userName}")
-    public ResponseEntity<Void> removeInvitation(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @PathVariable("userName") String userName, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<Void> removeInvitation(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(ID) String id, @PathVariable String userName, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         try {
             authorizationContext.setCredential(authorization);
             this.scope.removeScopeFromUser(new NexusInstanceReference(new NexusSchemaReference(org, domain, schema, version), id), userName);

@@ -28,8 +28,8 @@ import org.humanbrainproject.knowledgegraph.query.entity.fieldFilter.FieldFilter
 import org.humanbrainproject.knowledgegraph.query.entity.fieldFilter.Op;
 import org.humanbrainproject.knowledgegraph.query.entity.fieldFilter.Parameter;
 import org.humanbrainproject.knowledgegraph.query.entity.fieldFilter.Value;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
@@ -43,8 +43,8 @@ public class FieldFilterTest {
         document.put(GraphQueryKeys.GRAPH_QUERY_FILTER_OP.getFieldName(), "equals");
         document.put(GraphQueryKeys.GRAPH_QUERY_FILTER_VALUE.getFieldName(), "foo");
         FieldFilter fieldFilter = SpecificationInterpreter.createFieldFilter(new JSONObject(document));
-        Assert.assertEquals(fieldFilter.getOp(), Op.EQUALS);
-        Assert.assertEquals(fieldFilter.getValue(), new Value("foo"));
+        Assertions.assertEquals(fieldFilter.getOp(), Op.EQUALS);
+        Assertions.assertEquals(fieldFilter.getValue(), new Value("foo"));
     }
 
 //    @Test
@@ -71,7 +71,7 @@ public class FieldFilterTest {
         document.put(GraphQueryKeys.GRAPH_QUERY_FILTER_PARAM.getFieldName(), "myValue");
         FieldFilter fieldFilter = SpecificationInterpreter.createFieldFilter(new JSONObject(document));
 
-        Assert.assertEquals(fieldFilter.getOp(), Op.EQUALS);
-        Assert.assertEquals(fieldFilter.getParameter(), new Parameter("myValue"));
+        Assertions.assertEquals(fieldFilter.getOp(), Op.EQUALS);
+        Assertions.assertEquals(fieldFilter.getParameter(), new Parameter("myValue"));
     }
 }

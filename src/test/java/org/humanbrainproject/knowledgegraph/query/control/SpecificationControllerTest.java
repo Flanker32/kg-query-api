@@ -34,20 +34,22 @@ import org.humanbrainproject.knowledgegraph.query.entity.Query;
 import org.humanbrainproject.knowledgegraph.query.entity.QueryResult;
 import org.humanbrainproject.knowledgegraph.query.entity.Specification;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
 import java.io.IOException;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class SpecificationControllerTest {
 
     SpecificationController specificationController;
 
-    @Before
+    @BeforeEach
     public void setup(){
         this.specificationController = new SpecificationController();
         this.specificationController.authorizationContext = Mockito.mock(AuthorizationContext.class);
@@ -58,12 +60,14 @@ public class SpecificationControllerTest {
     }
 
 
-    @Test(expected = RuntimeException.class)
-    public void reflectSpecificationWithMultipleResponses() throws JSONException {
-        Map fakeResult = Mockito.mock(Map.class);
-        Query query = new Query("foo", TestObjectFactory.fooInstanceReference().getNexusSchema(), "fooVocab");
-        Mockito.doReturn(Collections.singletonList(fakeResult)).when(this.specificationController.specificationQuery).queryForSimpleMap(Mockito.any());
-        this.specificationController.releaseTreeBySpecification(Mockito.mock(Specification.class), query, null, TreeScope.ALL);
+    @Test
+    public void reflectSpecificationWithMultipleResponses() {
+        assertThrows(RuntimeException.class, () -> {
+            Map fakeResult = Mockito.mock(Map.class);
+            Query query = new Query("foo", TestObjectFactory.fooInstanceReference().getNexusSchema(), "fooVocab");
+            Mockito.doReturn(Collections.singletonList(fakeResult)).when(this.specificationController.specificationQuery).queryForSimpleMap(Mockito.any());
+            this.specificationController.releaseTreeBySpecification(Mockito.mock(Specification.class), query, null, TreeScope.ALL);
+        });
     }
 
 
@@ -75,7 +79,7 @@ public class SpecificationControllerTest {
         Specification mock = Mockito.mock(Specification.class);
         Mockito.doReturn(TestObjectFactory.fooInstanceReference().getNexusSchema().getRelativeUrl().getUrl()).when(mock).getRootSchema();
         Map map = this.specificationController.releaseTreeBySpecification(mock, query, TestObjectFactory.fooInstanceReference(), TreeScope.ALL);
-        Assert.assertEquals(fakeResult, map);
+        Assertions.assertEquals(fakeResult, map);
     }
 
 
@@ -84,6 +88,6 @@ public class SpecificationControllerTest {
         QueryResult fakeResult = Mockito.mock(QueryResult.class);
         Mockito.doReturn(fakeResult).when(this.specificationController.specificationQuery).queryForData(Mockito.any(), Mockito.any(), Mockito.any());
         QueryResult<List<Map>> listQueryResult = this.specificationController.queryForSpecification(Mockito.mock(Specification.class), null, new Filter(), null);
-        Assert.assertEquals(fakeResult, listQueryResult);
+        Assertions.assertEquals(fakeResult, listQueryResult);
     }
 }

@@ -24,20 +24,20 @@
 package org.humanbrainproject.knowledgegraph.query.entity;
 
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SpecFieldTest {
 
     SpecField specField;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         SpecField subField1 = TestObjectFactory.simpleSpecFieldWithOutgoingTraverses("foo", "http://foo");
         SpecField subField2 = TestObjectFactory.simpleSpecFieldWithOutgoingTraverses("bar", "http://bar");
@@ -103,7 +103,7 @@ public class SpecFieldTest {
         List<SpecTraverse> additionalDirectTraversals = field.getAdditionalDirectTraversals();
 
         assertEquals(1, additionalDirectTraversals.size());
-        assertEquals("http://barfoo", additionalDirectTraversals.get(0).pathName);
+        assertEquals("http://barfoo", additionalDirectTraversals.getFirst().pathName);
     }
 
     @Test

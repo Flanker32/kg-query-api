@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.structure.api;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusSchemaReference;
@@ -36,7 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
 import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstants.*;
@@ -53,7 +53,7 @@ public class StructureAPI {
     Structure structure;
 
     @GetMapping()
-    public ResponseEntity<JsonDocument> getStructure(@RequestParam(value = "withLinks", required = false, defaultValue = "false") boolean withLinks) {
+    public ResponseEntity<JsonDocument> getStructure(@RequestParam(required = false, defaultValue = "false") boolean withLinks) {
         authorizationContext.setMasterCredential();
         try {
             return ResponseEntity.ok(structure.getCachedStructure(withLinks));
@@ -64,9 +64,9 @@ public class StructureAPI {
         }
     }
 
-    @ApiOperation(value = "Refreshes the cache of the structure request. Please note, that additionally, the cache is flushed every 24h.")
+    @Operation(summary = "Refreshes the cache of the structure request. Please note, that additionally, the cache is flushed every 24h.")
     @PutMapping("/cache")
-    public ResponseEntity<JsonDocument> structureCacheRefresh(@RequestParam(value = "withLinks", required = false, defaultValue = "false") boolean withLinks) {
+    public ResponseEntity<JsonDocument> structureCacheRefresh(@RequestParam(required = false, defaultValue = "false") boolean withLinks) {
         try {
             return ResponseEntity.ok(structure.refreshStructureCache(withLinks));
         } catch (AsynchronousStartupDelay e) {
@@ -79,7 +79,7 @@ public class StructureAPI {
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}")
     public JsonDocument getStructureForSchema(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String
-            version, @RequestParam(value = "withLinks", required = false, defaultValue = "false") boolean withLinks, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+            version, @RequestParam(required = false, defaultValue = "false") boolean withLinks, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         authorizationContext.populateAuthorizationContext(authorization);
         return structure.getStructureForSchema(new NexusSchemaReference(org, domain, schema, version), withLinks);
     }

@@ -23,16 +23,16 @@
 
 package org.humanbrainproject.knowledgegraph.commons.authorization.entity;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OidcAccessTokenTest {
 
     OidcAccessToken oidcAccessToken;
 
-    @Before
+    @BeforeEach
     public void setup(){
         oidcAccessToken = new OidcAccessToken();
     }

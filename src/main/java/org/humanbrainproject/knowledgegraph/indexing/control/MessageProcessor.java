@@ -88,20 +88,20 @@ public class MessageProcessor {
 
 
     private NexusInstanceReference getInternalReference(Object value) {
-        if (value instanceof Map && ((Map) value).containsKey(JsonLdConsts.ID)) {
-            Object id = ((Map) value).get(JsonLdConsts.ID);
-            if (id instanceof String && ((String) id).startsWith(configuration.getNexusBase())) {
-                return NexusInstanceReference.createFromUrl((String) id);
+        if (value instanceof Map<?,?> map && map.containsKey(JsonLdConsts.ID)) {
+            Object id = map.get(JsonLdConsts.ID);
+            if (id instanceof String string && string.startsWith(configuration.getNexusBase())) {
+                return NexusInstanceReference.createFromUrl(string);
             }
         }
         return null;
     }
 
     void findEdges(Vertex vertex, Stack<Step> path, Object map, int globalEdgesCounter) {
-        if (map instanceof Map) {
-            for (Object key : ((Map) map).keySet()) {
+        if (map instanceof Map<?,?> map1) {
+            for (Object key : map1.keySet()) {
                 if(!HBPVocabulary.INFERENCE_ALTERNATIVES.equals(key)) {
-                    Object value = ((Map) map).get(key);
+                    Object value = map1.get(key);
                     if (value != null) {
                         if (!(value instanceof Collection)) {
                             value = Arrays.asList(value);
@@ -114,14 +114,14 @@ public class MessageProcessor {
                                 currentPath.push(new Step((String) key, globalEdgesCounter++));
                                 vertex.getEdges().add(new Edge(vertex, new JsonPath(currentPath), internalReference));
                             } else {
-                                findEdges(vertex, currentPath, ((Map) map).get(key), globalEdgesCounter);
+                                findEdges(vertex, currentPath, map1.get(key), globalEdgesCounter);
                             }
                         }
                     }
                 }
             }
-        } else if (map instanceof Collection) {
-            for (Object o : ((Collection) map)) {
+        } else if (map instanceof Collection<?> collection) {
+            for (Object o : collection) {
                 findEdges(vertex, path, o, globalEdgesCounter);
             }
         }

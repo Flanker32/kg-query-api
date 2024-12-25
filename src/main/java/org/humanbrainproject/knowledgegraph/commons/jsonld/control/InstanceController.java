@@ -57,10 +57,10 @@ public abstract class InstanceController<T extends JsonLdObject> {
         List<Map> instances = inferredRepository.findInstancesBySchemaAndFilter(UserByName.STRUCTURE.getNexusSchemaReference(), filters, asSystemUser);
         if (instances != null && !instances.isEmpty()) {
             if (instances.size() > 1) {
-                logger.error(String.format("Found %d instances instead of a unique", instances.size()));
+                logger.error("Found %d instances instead of a unique".formatted(instances.size()));
             }
             try {
-                return structure.getEntityClass().getConstructor(JsonLdStructure.class, JsonDocument.class).newInstance(structure, new JsonDocument(instances.get(0)));
+                return structure.getEntityClass().getConstructor(JsonLdStructure.class, JsonDocument.class).newInstance(structure, new JsonDocument(instances.getFirst()));
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Was not able to create instance - is the constructur missing?", e);
             }

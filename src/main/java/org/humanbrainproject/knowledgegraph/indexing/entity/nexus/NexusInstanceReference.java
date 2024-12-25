@@ -82,11 +82,11 @@ public class NexusInstanceReference {
     }
 
     public String getFullId(boolean withRevision) {
-        return String.format("%s%s", getRelativeUrl().getUrl(), !withRevision ? "" : String.format("?rev=%d", getRevision() != null ? getRevision() : 1));
+        return "%s%s".formatted(getRelativeUrl().getUrl(), !withRevision ? "" : "?rev=%d".formatted(getRevision() != null ? getRevision() : 1));
     }
 
     public NexusRelativeUrl getRelativeUrl() {
-        return new NexusRelativeUrl(NexusConfiguration.ResourceType.DATA, String.format("%s/%s", nexusSchema.getRelativeUrl().getUrl(), id));
+        return new NexusRelativeUrl(NexusConfiguration.ResourceType.DATA, "%s/%s".formatted(nexusSchema.getRelativeUrl().getUrl(), id));
     }
 
     public NexusSchemaReference getNexusSchema() {

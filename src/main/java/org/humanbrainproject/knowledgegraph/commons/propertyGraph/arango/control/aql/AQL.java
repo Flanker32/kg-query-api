@@ -142,7 +142,7 @@ public class AQL {
     }
 
     public TrustedAqlValue generateSearchTermQuery(TrustedAqlValue value){
-        String f = String.join(" ", Arrays.stream(value.getValue().split(" ")).map(el -> String.format("%%%s%%", el.trim().toLowerCase())).collect(Collectors.toList()));
+        String f = String.join(" ", Arrays.stream(value.getValue().split(" ")).map(el -> "%%%s%%".formatted(el.trim().toLowerCase())).collect(Collectors.toList()));
         if(f.isEmpty()){
             f = "%";
         }

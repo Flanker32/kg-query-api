@@ -84,8 +84,8 @@ public class ArangoGraph {
                         arangoToNexusId.put((String) vertex.get(ArangoVocabulary.ID), id);
                         node.put("id", id);
                         Object type = vertex.get(JsonLdConsts.TYPE);
-                        if (type instanceof List) {
-                            type = ((List) type).isEmpty() ? null : ((List) type).get(0);
+                        if (type instanceof List<?> list) {
+                            type = list.isEmpty() ? null : list.getFirst();
                         }
                         node.put("name", translator.translateSemanticValueToHumanReadableLabel((String) type));
                         node.put("schemas", NexusInstanceReference.createFromUrl(id).getNexusSchema().toString());

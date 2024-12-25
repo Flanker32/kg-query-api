@@ -90,11 +90,11 @@ public class SpatialAnchoring extends KnownSemantic {
 
     public Set<ThreeDVector> getCoordinatesForPointClouds(){
         Object o = spec.getQualifiedMap().get(HBPVocabulary.SPATIAL_COORDINATES);
-        if(o instanceof List){
-            return ((List<?>)o).stream().filter(c -> c instanceof Map).map(c -> from3ValueCoordinateList((Map) c)).collect(Collectors.toSet());
+        if(o instanceof List<?> list){
+            return list.stream().filter(c -> c instanceof Map).map(c -> from3ValueCoordinateList((Map) c)).collect(Collectors.toSet());
         }
-        else if (o instanceof Map){
-            ThreeDVector threeDVector = from3ValueCoordinateList((Map) o);
+        else if (o instanceof Map<?,?> map){
+            ThreeDVector threeDVector = from3ValueCoordinateList(map);
             if(threeDVector!=null){
                 return Collections.singleton(threeDVector);
             }
@@ -106,8 +106,8 @@ public class SpatialAnchoring extends KnownSemantic {
         Object x = coordinate.get(HBPVocabulary.SPATIAL_NAMESPACE+"x");
         Object y = coordinate.get(HBPVocabulary.SPATIAL_NAMESPACE+"y");
         Object z = coordinate.get(HBPVocabulary.SPATIAL_NAMESPACE+"z");
-        if(x instanceof Number && y instanceof Number && z instanceof Number){
-            return new ThreeDVector(((Number)x).doubleValue(), ((Number)y).doubleValue(), ((Number)z).doubleValue());
+        if(x instanceof Number number && y instanceof Number number1 && z instanceof Number number2){
+            return new ThreeDVector(number.doubleValue(), number1.doubleValue(), number2.doubleValue());
         }
         return null;
     }

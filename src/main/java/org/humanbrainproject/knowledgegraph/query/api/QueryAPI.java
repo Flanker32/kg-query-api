@@ -23,9 +23,9 @@
 
 package org.humanbrainproject.knowledgegraph.query.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.io.IOUtils;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.ExternalApi;
@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +70,7 @@ import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstant
 @RequestMapping(value = "/query", produces = MediaType.APPLICATION_JSON)
 @ToBeTested(easy = true)
 @CrossOrigin
-@Api(value = "/query", description = "The API for querying the knowledge graph")
+@Tag(name = "/query", description = "The API for querying the knowledge graph")
 public class QueryAPI {
 
     private Logger log = LoggerFactory.getLogger(QueryAPI.class);
@@ -155,7 +155,7 @@ public class QueryAPI {
         }
     }
 
-    @ApiOperation(value = "Create python code for a stored query", notes = "Create python 3 code to conveniently access the stored query")
+    @Operation(summary = "Create python code for a stored query", description = "Create python 3 code to conveniently access the stored query")
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/python", produces = "text/plain")
     public ResponseEntity<String> createPythonWrapper(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId) throws IOException, JSONException {
         String pythonCode = codeGenerator.createPythonCode(new StoredQueryReference(new NexusSchemaReference(org, domain, schema, version), queryId));
@@ -205,12 +205,12 @@ public class QueryAPI {
 
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/templates/{" + TEMPLATE_ID + "}/meta")
-    public ResponseEntity<QueryResult> applyFreemarkerTemplateToMetaApi(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) throws Exception {
+    public ResponseEntity<QueryResult> applyFreemarkerTemplateToMetaApi(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) throws Exception {
         return applyFreemarkerTemplateToMetaApi(org, domain, schema, version, queryId, templateId, "meta", includeOriginalJson, authorizationToken);
     }
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/templates/{" + TEMPLATE_ID + "}/libraries/{" + LIBRARY + "}/meta")
-    public ResponseEntity<QueryResult> applyFreemarkerTemplateToMetaApi(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(LIBRARY) String library, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) throws Exception {
+    public ResponseEntity<QueryResult> applyFreemarkerTemplateToMetaApi(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(LIBRARY) String library, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) throws Exception {
         try {
             authorizationContext.populateAuthorizationContext(authorizationToken);
 
@@ -230,7 +230,7 @@ public class QueryAPI {
 
 
     @PostMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/instances/{" + INSTANCE_ID + "}/templates")
-    public ResponseEntity<Map> applyFreemarkerTemplateToApiWithId(@RequestBody String template, @PathVariable(QUERY_ID) String queryId, @PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(INSTANCE_ID) String instanceId, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<Map> applyFreemarkerTemplateToApiWithId(@RequestBody String template, @PathVariable(QUERY_ID) String queryId, @PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(INSTANCE_ID) String instanceId, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         try {
             authorizationContext.populateAuthorizationContext(authorizationToken);
             queryContext.populateQueryContext(databaseScope);
@@ -251,13 +251,13 @@ public class QueryAPI {
 
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/templates/{" + TEMPLATE_ID + "}/instances")
-    public ResponseEntity<QueryResult> executeStoredQueryWithTemplate(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(value = START, required = false) Integer start, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<QueryResult> executeStoredQueryWithTemplate(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(value = START, required = false) Integer start, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         return executeStoredQueryWithTemplate(org, domain, schema, version, queryId, templateId, "instances", size, start, searchTerm, databaseScope, restrictToOrganizations, authorization, includeOriginalJson, allRequestParams);
     }
 
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/templates/{" + TEMPLATE_ID + "}/libraries/{" + LIBRARY + "}/instances")
-    public ResponseEntity<QueryResult> executeStoredQueryWithTemplate(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(LIBRARY) String library, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(value = START, required = false) Integer start, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<QueryResult> executeStoredQueryWithTemplate(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(LIBRARY) String library, @RequestParam(value = SIZE, required = false) Integer size, @RequestParam(value = START, required = false) Integer start, @RequestParam(value = SEARCH, required = false) String searchTerm, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         queryContext.populateQueryContext(databaseScope);
 
@@ -277,7 +277,7 @@ public class QueryAPI {
     }
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/templates/{" + TEMPLATE_ID + "}/libraries/{" + LIBRARY + "}/instances/{" + INSTANCE_ID + "}")
-    public ResponseEntity<Map> executeStoredQueryWithTemplateAndLibrary(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(LIBRARY) String library, @PathVariable(INSTANCE_ID) String instanceId, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<Map> executeStoredQueryWithTemplateAndLibrary(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(LIBRARY) String library, @PathVariable(INSTANCE_ID) String instanceId, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         queryContext.populateQueryContext(databaseScope);
 
@@ -297,7 +297,7 @@ public class QueryAPI {
     }
 
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/templates/{" + TEMPLATE_ID + "}/instances/{" + INSTANCE_ID + "}")
-    public ResponseEntity<Map> executeStoredQueryWithTemplate(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(INSTANCE_ID) String instanceId, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @ApiParam("Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(value = "includeOriginalJson", required = false) boolean includeOriginalJson, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<Map> executeStoredQueryWithTemplate(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(TEMPLATE_ID) String templateId, @PathVariable(INSTANCE_ID) String instanceId, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @Parameter(title = "Defines if the underlying json (the one the template is applied to) shall be part of the result as well.") @RequestParam(required = false) boolean includeOriginalJson, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         queryContext.populateQueryContext(databaseScope);
 
@@ -317,9 +317,9 @@ public class QueryAPI {
 
 
     @ExternalApi
-    @ApiOperation(value = "For test purposes only!!! Execute query from payload", notes = "Execute the query (in payload) against the instances of the given schema. Please note, that this is thought to be for test purposes only! If you're happy with your query, you should register it in the graph. To help you with actually doing this, we've introduced an artificial delay (2secs right now, if this doesn't help, we increase it). :)")
+    @Operation(summary = "For test purposes only!!! Execute query from payload", description = "Execute the query (in payload) against the instances of the given schema. Please note, that this is thought to be for test purposes only! If you're happy with your query, you should register it in the graph. To help you with actually doing this, we've introduced an artificial delay (2secs right now, if this doesn't help, we increase it). :)")
     @PostMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/instances", consumes = {MediaType.APPLICATION_JSON, RestUtils.APPLICATION_LD_JSON})
-    public ResponseEntity<QueryResult> queryPropertyGraphBySpecification(@RequestBody String payload, @PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @ApiParam(VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @ApiParam(SIZE_DOC) @RequestParam(value = SIZE, required = false) Integer size, @ApiParam(START_DOC) @RequestParam(value = START, required = false) Integer start, @ApiParam(RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = ORGS, required = false) String organizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiParam(SEARCH_DOC) @RequestParam(value = SEARCH, required = false) String searchTerm, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<QueryResult> queryPropertyGraphBySpecification(@RequestBody String payload, @PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @Parameter(title = VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @Parameter(title = SIZE_DOC) @RequestParam(value = SIZE, required = false) Integer size, @Parameter(title = START_DOC) @RequestParam(value = START, required = false) Integer start, @Parameter(title = RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = ORGS, required = false) String organizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @Parameter(title = SEARCH_DOC) @RequestParam(value = SEARCH, required = false) String searchTerm, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         try {
             //Thread.sleep(2000);
             authorizationContext.populateAuthorizationContext(authorizationToken);
@@ -333,7 +333,7 @@ public class QueryAPI {
             QueryResult<List<Map>> result = this.query.queryPropertyGraphBySpecification(query, null);
             String userHashedId = LoggingUtils.hashUserId(authorizationContext.getUserId());
             result.setImportantMessage("This query is executed with a mode thought for query testing only (with throttled performance). Please register your query if you're happy with it. It's easy and you gain speed ;)!");
-            log.info(String.format("[Query][Result] - schema: %s - total: %s - user: %s - payload - %s", schemaReference.toString(), result.getTotal(), userHashedId, payload.replaceAll("\n", "").replaceAll(" ", "")));
+            log.info("[Query][Result] - schema: %s - total: %s - user: %s - payload - %s".formatted(schemaReference.toString(), result.getTotal(), userHashedId, payload.replaceAll("\n", "").replaceAll(" ", "")));
             return ResponseEntity.ok(result);
         } catch (IllegalDatabaseScope e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -344,9 +344,9 @@ public class QueryAPI {
         }
     }
 
-    @ApiOperation(value = "For test purposes only!!! Execute query from payload for a single instance", notes = "Execute the query (in payload) against the instances of the given schema. Please note, that this is thought to be for test purposes only! If you're happy with your query, you should register it in the graph. To help you with actually doing this, we've introduced an artificial delay (2secs right now, if this doesn't help, we increase it). :)")
+    @Operation(summary = "For test purposes only!!! Execute query from payload for a single instance", description = "Execute the query (in payload) against the instances of the given schema. Please note, that this is thought to be for test purposes only! If you're happy with your query, you should register it in the graph. To help you with actually doing this, we've introduced an artificial delay (2secs right now, if this doesn't help, we increase it). :)")
     @PostMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/instances/{" + INSTANCE_ID + "}", consumes = {MediaType.APPLICATION_JSON, RestUtils.APPLICATION_LD_JSON})
-    public ResponseEntity<Map> queryPropertyGraphBySpecificationWithId(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(INSTANCE_ID) String instanceId, @RequestBody String payload, @ApiParam(VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @ApiParam(RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<Map> queryPropertyGraphBySpecificationWithId(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(INSTANCE_ID) String instanceId, @RequestBody String payload, @Parameter(title = VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @Parameter(title = RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         try {
             //Thread.sleep(2000);
             authorizationContext.populateAuthorizationContext(authorizationToken);
@@ -359,11 +359,11 @@ public class QueryAPI {
             QueryResult<List<Map>> result = this.query.queryPropertyGraphBySpecification(query, null);
 
             if (result.getResults().size() >= 1) {
-                Map body = result.getResults().get(0);
+                Map body = result.getResults().getFirst();
 
                 body.put("importantMessage", "This query is executed with a mode thought for query testing only (with throttled performance). Please register your query if you're happy with it. It's easy and you gain speed ;)!");
                 String userHashedId = LoggingUtils.hashUserId(authorizationContext.getUserId());
-                log.info(String.format("[Query][Result] - schema: %s - instanceid: %s - user: %s - payload - %s", schemaReference.toString(), instanceId, userHashedId, payload.replaceAll("\n", "").replaceAll(" ", "")));
+                log.info("[Query][Result] - schema: %s - instanceid: %s - user: %s - payload - %s".formatted(schemaReference.toString(), instanceId, userHashedId, payload.replaceAll("\n", "").replaceAll(" ", "")));
                 return ResponseEntity.ok(body);
             } else {
                 return ResponseEntity.notFound().build();
@@ -378,9 +378,9 @@ public class QueryAPI {
     }
 
     @ExternalApi
-    @ApiOperation(value = "Save a query specification in KG (and profit from features such as code generation)")
+    @Operation(summary = "Save a query specification in KG (and profit from features such as code generation)")
     @PutMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}", consumes = {MediaType.APPLICATION_JSON, RestUtils.APPLICATION_LD_JSON}, produces = MediaType.TEXT_PLAIN)
-    public ResponseEntity<String> saveSpecificationToDB(@RequestBody String payload, @PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @ApiParam(value = "Freely defined alias for the query. Please note that only the user who has created the specification initially can update it. If an alias is already occupied, please use another one.", required = true) @PathVariable(QUERY_ID) String id, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC, required = true) @RequestHeader(value = HttpHeaders.AUTHORIZATION) String authorization) throws Exception {
+    public ResponseEntity<String> saveSpecificationToDB(@RequestBody String payload, @PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @Parameter(title = "Freely defined alias for the query. Please note that only the user who has created the specification initially can update it. If an alias is already occupied, please use another one.", required = true) @PathVariable(QUERY_ID) String id, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC, required = true) @RequestHeader(value = HttpHeaders.AUTHORIZATION) String authorization) throws Exception {
         try {
             authorizationContext.populateAuthorizationContext(authorization);
             query.storeSpecificationInDb(payload, new StoredQueryReference(new NexusSchemaReference(org, domain, schema, version), id));
@@ -395,9 +395,9 @@ public class QueryAPI {
     }
 
     @ExternalApi
-    @ApiOperation(value = "Delete a query specification in KG")
+    @Operation(summary = "Delete a query specification in KG")
     @DeleteMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}", produces = MediaType.TEXT_PLAIN)
-    public ResponseEntity<String> removeSpecificationToDB(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @ApiParam(value = "Freely defined alias for the query. Please note that only the user who has created the specification initially can update it. If an alias is already occupied, please use another one.", required = true) @PathVariable(QUERY_ID) String id, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC, required = true) @RequestHeader(value = HttpHeaders.AUTHORIZATION) String authorization) throws Exception {
+    public ResponseEntity<String> removeSpecificationToDB(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @Parameter(title = "Freely defined alias for the query. Please note that only the user who has created the specification initially can update it. If an alias is already occupied, please use another one.", required = true) @PathVariable(QUERY_ID) String id, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC, required = true) @RequestHeader(value = HttpHeaders.AUTHORIZATION) String authorization) throws Exception {
         try {
             authorizationContext.populateAuthorizationContext(authorization);
             query.removeSpecificationInDb(new StoredQueryReference(new NexusSchemaReference(org, domain, schema, version), id));
@@ -413,10 +413,10 @@ public class QueryAPI {
         }
     }
 
-    @ApiOperation(value = "Execute a stored query and fetch the corresponding instances")
+    @Operation(summary = "Execute a stored query and fetch the corresponding instances")
     @Deprecated
     @GetMapping("/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/instances/deprecated")
-    public ResponseEntity<QueryResult> executeStoredQuery(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @ApiParam(SIZE_DOC) @RequestParam(value = SIZE, required = false) Integer size, @ApiParam(START_DOC) @RequestParam(value = START, required = false) Integer start, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiParam(SEARCH_DOC) @RequestParam(value = SEARCH, required = false) String searchTerm, @ApiParam(VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @ApiParam(RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<QueryResult> executeStoredQuery(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @Parameter(title = SIZE_DOC) @RequestParam(value = SIZE, required = false) Integer size, @Parameter(title = START_DOC) @RequestParam(value = START, required = false) Integer start, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @Parameter(title = SEARCH_DOC) @RequestParam(value = SEARCH, required = false) String searchTerm, @Parameter(title = VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @Parameter(title = RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         try {
 
 
@@ -430,7 +430,7 @@ public class QueryAPI {
             query.getPagination().setStart(start).setSize(size);
             QueryResult<List<Map>> result = this.query.queryPropertyGraphByStoredSpecification(query);
             String userHashedId = LoggingUtils.hashUserId(authorizationContext.getUserId());
-            log.info(String.format("[Query][Result] - schema: %s - queryid: %s - total: %d - user: %s", schemaRef.toString(), queryId, result.getTotal(), userHashedId));
+            log.info("[Query][Result] - schema: %s - queryid: %s - total: %d - user: %s".formatted(schemaRef.toString(), queryId, result.getTotal(), userHashedId));
             return ResponseEntity.ok(result);
         } catch (IllegalDatabaseScope e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -444,15 +444,15 @@ public class QueryAPI {
     }
 
 
-    @ApiOperation(value = "Execute a stored query and fetch the corresponding instances")
+    @Operation(summary = "Execute a stored query and fetch the corresponding instances")
     @ExternalApi
     @GetMapping("/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/instances")
-    public ResponseEntity<QueryResult> executeStoredQuery(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @ApiParam(SIZE_DOC) @RequestParam(value = SIZE, required = false) Integer size, @ApiParam(START_DOC) @RequestParam(value = START, required = false) Integer start, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiParam(VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @ApiParam(RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @ApiParam(value = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<QueryResult> executeStoredQuery(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @Parameter(title = SIZE_DOC) @RequestParam(value = SIZE, required = false) Integer size, @Parameter(title = START_DOC) @RequestParam(value = START, required = false) Integer start, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @Parameter(title = VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @Parameter(title = RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @Parameter(title = ParameterConstants.AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         return executeStoredQuery(org, domain, schema, version, queryId, size, start, databaseScope, null, vocab, restrictToOrganizations, authorizationToken, allRequestParams);
     }
 
 
-    @ApiOperation(value = "List the filter parameters of a stored query")
+    @Operation(summary = "List the filter parameters of a stored query")
     @ExternalApi
     @GetMapping("/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/parameters")
     public ResponseEntity<List<ParameterDescription>> listFilterParameters(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId) throws Exception {
@@ -470,10 +470,10 @@ public class QueryAPI {
     }
 
 
-    @ApiOperation(value = "Execute a stored query for a specific instance identified by its id")
+    @Operation(summary = "Execute a stored query for a specific instance identified by its id")
     @ExternalApi
     @GetMapping("/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/instances/{" + INSTANCE_ID + "}")
-    public ResponseEntity<Map> executeStoredQueryForInstance(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(INSTANCE_ID) String instanceId, @ApiParam(RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiParam(VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @ApiParam(value = AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
+    public ResponseEntity<Map> executeStoredQueryForInstance(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId, @PathVariable(INSTANCE_ID) String instanceId, @Parameter(title = RESTRICTED_ORGANIZATION_DOC) @RequestParam(value = RESTRICT_TO_ORGANIZATIONS, required = false) String restrictToOrganizations, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @Parameter(title = VOCAB_DOC) @RequestParam(value = VOCAB, required = false) String vocab, @Parameter(title = AUTHORIZATION_DOC) @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws Exception {
         try {
             authorizationContext.populateAuthorizationContext(authorizationToken);
             queryContext.populateQueryContext(databaseScope);
@@ -485,8 +485,8 @@ public class QueryAPI {
             QueryResult<List<Map>> result = this.query.queryPropertyGraphByStoredSpecification(query);
             if (result.getResults().size() >= 1) {
                 String hashedUserId = LoggingUtils.hashUserId(authorizationContext.getUserId());
-                log.info(String.format("[Query][Result] - schema: %s - queryid: %s - instanceid: %s - user: %s", schemaRef.toString(), queryId, instanceId, hashedUserId));
-                return ResponseEntity.ok(result.getResults().get(0));
+                log.info("[Query][Result] - schema: %s - queryid: %s - instanceid: %s - user: %s".formatted(schemaRef.toString(), queryId, instanceId, hashedUserId));
+                return ResponseEntity.ok(result.getResults().getFirst());
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -502,7 +502,7 @@ public class QueryAPI {
     }
 
     @ExternalApi
-    @ApiOperation(value = "Create PyPi compatible python code for a stored query", notes = "Creates a zip package of python code (compatible to be installed with PyPi) to conviently access the stored query")
+    @Operation(summary = "Create PyPi compatible python code for a stored query", description = "Creates a zip package of python code (compatible to be installed with PyPi) to conviently access the stored query")
     @GetMapping(value = "/{" + ORG + "}/{" + DOMAIN + "}/{" + SCHEMA + "}/{" + VERSION + "}/{" + QUERY_ID + "}/python/pip", produces = "application/zip")
     public ResponseEntity<byte[]> createPythonWrapperAsPip(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable(QUERY_ID) String queryId) throws IOException, JSONException {
         String pythonCode = codeGenerator.createPythonCode(new StoredQueryReference(new NexusSchemaReference(org, domain, schema, version), queryId));

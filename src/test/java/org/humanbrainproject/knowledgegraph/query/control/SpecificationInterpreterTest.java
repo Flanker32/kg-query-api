@@ -27,14 +27,14 @@ import org.apache.commons.io.IOUtils;
 import org.humanbrainproject.knowledgegraph.query.entity.Specification;
 import org.humanbrainproject.knowledgegraph.query.entity.fieldFilter.Op;
 import org.humanbrainproject.knowledgegraph.query.entity.fieldFilter.Value;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SpecificationInterpreterTest {
 
@@ -43,7 +43,7 @@ public class SpecificationInterpreterTest {
     String filterSpecification;
 
 
-    @Before
+    @BeforeEach
     public void setup() throws IOException{
         interpreter = new SpecificationInterpreter();
         testSpecification = IOUtils.toString(this.getClass().getResourceAsStream("/specification.json"), "UTF-8");
@@ -60,8 +60,8 @@ public class SpecificationInterpreterTest {
     @Test
     public void readFilterSpecification() throws JSONException {
         Specification specification = interpreter.readSpecification(filterSpecification, null, null);
-        assertNotEquals(null, specification.getFields().get(0).fieldFilter);
-        assertEquals(Op.EQUALS.name(), specification.getFields().get(0).fieldFilter.getOp().name());
-        assertEquals(new Value("test"), specification.getFields().get(0).fieldFilter.getValue());
+        assertNotEquals(null, specification.getFields().getFirst().fieldFilter);
+        assertEquals(Op.EQUALS.name(), specification.getFields().getFirst().fieldFilter.getOp().name());
+        assertEquals(new Value("test"), specification.getFields().getFirst().fieldFilter.getValue());
     }
 }

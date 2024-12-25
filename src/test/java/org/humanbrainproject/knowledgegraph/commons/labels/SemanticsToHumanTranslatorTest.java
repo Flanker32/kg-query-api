@@ -24,16 +24,16 @@
 package org.humanbrainproject.knowledgegraph.commons.labels;
 
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.entity.ArangoCollectionReference;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SemanticsToHumanTranslatorTest {
 
     SemanticsToHumanTranslator translator;
 
-    @Before
+    @BeforeEach
     public void setup(){
         this.translator = new SemanticsToHumanTranslator();
     }

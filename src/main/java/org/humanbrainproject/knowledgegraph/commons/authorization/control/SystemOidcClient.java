@@ -64,7 +64,7 @@ public class SystemOidcClient {
 
     private String getUrlFromConfig(String host, String key){
         RestTemplate template = new RestTemplate();
-        String openidconf = template.getForObject(String.format("%s/%s", host, RELATIVE_OPENID_CONFIGURATION_URL), String.class);
+        String openidconf = template.getForObject("%s/%s".formatted(host, RELATIVE_OPENID_CONFIGURATION_URL), String.class);
         Map map = gson.fromJson(openidconf, Map.class);
         return map.get(key).toString();
     }

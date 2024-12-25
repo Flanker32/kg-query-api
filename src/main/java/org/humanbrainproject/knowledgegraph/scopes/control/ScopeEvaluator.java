@@ -95,14 +95,14 @@ public class ScopeEvaluator {
     private void collectObjectIds(Map scopeTree, Set<String> objectIds) {
         if(scopeTree!=null) {
             Object id = scopeTree.get(JsonLdConsts.ID);
-            if (id instanceof String) {
-                objectIds.add((String) id);
+            if (id instanceof String string) {
+                objectIds.add(string);
             }
             Object children = scopeTree.get("children");
-            if (children instanceof List) {
-                for (Object child : ((List) children)) {
-                    if (child instanceof Map) {
-                        collectObjectIds((Map) child, objectIds);
+            if (children instanceof List<?> list) {
+                for (Object child : list) {
+                    if (child instanceof Map<?,?> map) {
+                        collectObjectIds(map, objectIds);
                     }
                 }
             }

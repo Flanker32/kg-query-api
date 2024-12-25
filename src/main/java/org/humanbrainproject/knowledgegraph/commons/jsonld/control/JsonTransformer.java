@@ -55,18 +55,18 @@ public class JsonTransformer {
     public Map parseToMap(String json) {
         try {
             Object o = gson.fromJson(json, Object.class);
-            if (o instanceof Map) {
-                return (Map) o;
-            } else if (o instanceof List && !((List) o).isEmpty()) {
-                Object firstElement = ((List) o).get(0);
-                if (firstElement instanceof Map) {
-                    return (Map) firstElement;
+            if (o instanceof Map<?,?> map) {
+                return map;
+            } else if (o instanceof List<?> list && !list.isEmpty()) {
+                Object firstElement = list.getFirst();
+                if (firstElement instanceof Map<?,?> map) {
+                    return map;
                 }
             }
             return null;
         }
         catch(RuntimeException e){
-            logger.error(String.format("Was not able to parse JSON:\n%s", json), e);
+            logger.error("Was not able to parse JSON:\n%s".formatted(json), e);
             throw e;
         }
     }

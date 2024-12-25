@@ -63,8 +63,8 @@ public class AuthorizationController {
         if(credential instanceof InternalMasterKey){
             return systemOidcHeaderInterceptor;
         }
-        else if(credential instanceof OidcAccessToken){
-            return new OidcHeaderInterceptor((OidcAccessToken)credential);
+        else if(credential instanceof OidcAccessToken token){
+            return new OidcHeaderInterceptor(token);
         }
         throw new RuntimeException("Unknown credential: "+credential);
     }
@@ -77,14 +77,14 @@ public class AuthorizationController {
     final Map<String, Set<AccessRight>> tokenToAccessRights = Collections.synchronizedMap(new LRUMap<>());
 
     Set<AccessRight> getAccessRights(Credential credential) {
-        if (credential instanceof OidcAccessToken && tokenToAccessRights.containsKey(((OidcAccessToken)credential).getBearerToken())) {
-            return tokenToAccessRights.get(((OidcAccessToken)credential).getBearerToken());
+        if (credential instanceof OidcAccessToken token && tokenToAccessRights.containsKey(token.getBearerToken())) {
+            return tokenToAccessRights.get(token.getBearerToken());
         }
         Set<String> allOrganizations = nexusClient.getAllOrganizations(getInterceptor(credential));
         //TODO right now, we only have the differentiation if a organization is visible or not - we therefore only can tell that there is at least READ access. We should have other means to ensure WRITE access.
         Set<AccessRight> accessRights = allOrganizations.stream().map(org -> new AccessRight(org.replace(nexusConfiguration.getNexusBase(NexusConfiguration.ResourceType.ORGANIZATION)+"/", ""), AccessRight.Permission.READ)).collect(Collectors.toSet());
-        if (credential instanceof OidcAccessToken && tokenToAccessRights.containsKey(((OidcAccessToken)credential).getBearerToken())) {
-            tokenToAccessRights.put(((OidcAccessToken)credential).getBearerToken(), accessRights);
+        if (credential instanceof OidcAccessToken token && tokenToAccessRights.containsKey(token.getBearerToken())) {
+            tokenToAccessRights.put(token.getBearerToken(), accessRights);
         }
         return accessRights;
     }

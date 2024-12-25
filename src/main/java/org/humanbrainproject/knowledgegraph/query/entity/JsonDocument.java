@@ -63,8 +63,8 @@ public class JsonDocument extends LinkedHashMap<String, Object>{
             if(type instanceof String){
                 return type.equals(lookupType);
             }
-            else if(type instanceof Collection){
-                return ((Collection)type).contains(lookupType);
+            else if(type instanceof Collection<?> collection){
+                return collection.contains(lookupType);
             }
         }
         return false;
@@ -78,15 +78,15 @@ public class JsonDocument extends LinkedHashMap<String, Object>{
     public String getPrimaryIdentifier(){
         if(this.containsKey(SchemaOrgVocabulary.IDENTIFIER)){
             Object identifier = get(SchemaOrgVocabulary.IDENTIFIER);
-            if(identifier instanceof List && !((List)identifier).isEmpty()){
-                for (Object o : ((List) identifier)) {
-                    if(o instanceof String){
-                        return (String)o;
+            if(identifier instanceof List<?> list && !list.isEmpty()){
+                for (Object o : list) {
+                    if(o instanceof String string){
+                        return string;
                     }
                 }
             }
-            else if(identifier instanceof String){
-                return (String) identifier;
+            else if(identifier instanceof String string){
+                return string;
             }
         }
         return getNexusId();
@@ -142,9 +142,9 @@ public class JsonDocument extends LinkedHashMap<String, Object>{
         if(o==null){
             map.put(propertyName, value);
         }
-        else if(o instanceof Collection){
-            if(!((Collection)o).contains(value)) {
-                ((Collection) o).add(value);
+        else if(o instanceof Collection<?> collection){
+            if(!collection.contains(value)) {
+                collection.add(value);
             }
         }
         else if(!o.equals(value)){
@@ -177,8 +177,8 @@ public class JsonDocument extends LinkedHashMap<String, Object>{
         else {
             for (Object key : currentMap.keySet()) {
                 Object value = currentMap.get(key);
-                if(value instanceof Map){
-                    processLinks(referenceConsumer, (Map)value, false);
+                if(value instanceof Map<?,?> map){
+                    processLinks(referenceConsumer, map, false);
                 }
             }
         }
@@ -191,13 +191,13 @@ public class JsonDocument extends LinkedHashMap<String, Object>{
     private void replaceNamespace(String oldNamespace, String newNamespace, Map currentMap){
         HashSet keyList = new HashSet<>(currentMap.keySet());
         for (Object key : keyList) {
-            if(key instanceof String){
-                if(((String)key).startsWith(oldNamespace)){
+            if(key instanceof String string){
+                if(string.startsWith(oldNamespace)){
                     Object value = currentMap.remove(key);
-                    if(value instanceof Map){
-                        replaceNamespace(oldNamespace, newNamespace, (Map)value);
+                    if(value instanceof Map<?,?> map){
+                        replaceNamespace(oldNamespace, newNamespace, map);
                     }
-                    currentMap.put(newNamespace+((String)key).substring(oldNamespace.length()), value);
+                    currentMap.put(newNamespace+string.substring(oldNamespace.length()), value);
                 }
             }
         }

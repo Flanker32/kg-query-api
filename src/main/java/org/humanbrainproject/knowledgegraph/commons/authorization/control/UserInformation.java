@@ -45,11 +45,11 @@ public class UserInformation extends HashMap<String, Object> {
     public boolean hasCuratedPermission(){
         Object groups = get("groups");
         List<String> g = null;
-        if(groups instanceof List){
-            g = (List)groups;
+        if(groups instanceof List<?> list){
+            g = list;
         }
-        else if(groups instanceof String){
-            g = Arrays.asList(((String) groups).split(","));
+        else if(groups instanceof String string){
+            g = Arrays.asList(string.split(","));
         }
         return g!=null && g.contains("group-kg-curatedInstances");
     }
@@ -57,11 +57,11 @@ public class UserInformation extends HashMap<String, Object> {
     public boolean hasReleasedPermission(){
         Object groups = get("groups");
         List<String> g = null;
-        if(groups instanceof List){
-            g = (List)groups;
+        if(groups instanceof List<?> list){
+            g = list;
         }
-        else if(groups instanceof String){
-            g = Arrays.asList(((String) groups).split(","));
+        else if(groups instanceof String string){
+            g = Arrays.asList(string.split(","));
         }
         return g!=null && g.contains("group-kg-releasedInstances");
     }

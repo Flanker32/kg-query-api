@@ -27,28 +27,25 @@ import org.humanbrainproject.knowledgegraph.indexing.entity.QualifiedIndexingMes
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceReference;
 import org.humanbrainproject.knowledgegraph.indexing.entity.todo.TodoList;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 
-@Ignore("IntegrationTest")
+@Disabled("IntegrationTest")
 public class BasicIndexingControllerIntegrationTest {
 
     @Autowired
     BasicIndexingController controller;
 
 
-    @Before
+    @BeforeEach
     public void setup() {
     }
 

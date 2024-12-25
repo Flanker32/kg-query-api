@@ -65,14 +65,14 @@ public class Edge implements VertexOrEdge{
         if(path.isEmpty()){
             return null;
         }
-        return path.get(path.size()-1).getOrderNumber();
+        return path.getLast().getOrderNumber();
     }
 
     public String getName(){
         if(path.isEmpty()){
             return null;
         }
-        return path.get(path.size()-1).getName();
+        return path.getLast().getName();
     }
 
 }

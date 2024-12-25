@@ -78,13 +78,11 @@ public class SpecificationInterpreter {
 
     private List<SpecField> createSpecFields(Object origin, Map<String, String> allParameters) throws JSONException {
         List<SpecField> result = new ArrayList<>();
-        if (origin instanceof JSONArray) {
-            JSONArray originArray = (JSONArray) origin;
+        if (origin instanceof JSONArray originArray) {
             for (int i = 0; i < originArray.length(); i++) {
                 result.addAll(createSpecFields(originArray.get(i), allParameters));
             }
-        } else if (origin instanceof JSONObject) {
-            JSONObject originObj = (JSONObject) origin;
+        } else if (origin instanceof JSONObject originObj) {
             List<Object> allRelativePaths = null;
             if (originObj.has(GraphQueryKeys.GRAPH_QUERY_MERGE.getFieldName())) {
                 allRelativePaths = getAllRelativePaths(originObj.get(GraphQueryKeys.GRAPH_QUERY_MERGE.getFieldName()));
@@ -110,7 +108,7 @@ public class SpecificationInterpreter {
                             }
                             if (fieldName == null) {
                                 //Fall back to the name of the last traversal item if the fieldname is not defined.
-                                fieldName = traversalPath.get(traversalPath.size() - 1).pathName;
+                                fieldName = traversalPath.getLast().pathName;
                             }
                             if (originObj.has(GraphQueryKeys.GRAPH_QUERY_FIELDS.getFieldName())) {
                                 specFields = createSpecFields(originObj.get(GraphQueryKeys.GRAPH_QUERY_FIELDS.getFieldName()), allParameters);
@@ -138,8 +136,8 @@ public class SpecificationInterpreter {
                             Iterator keys = originObj.keys();
                             while(keys.hasNext()){
                                 Object key = keys.next();
-                                if(key instanceof String && !GraphQueryKeys.isKey((String)key)){
-                                    customDirectives.put((String)key, originObj.get((String)key));
+                                if(key instanceof String string && !GraphQueryKeys.isKey(string)){
+                                    customDirectives.put(string, originObj.get(string));
                                 }
                             }
                             fieldsPerRelativePath.add(new SpecField(fieldName, specFields, traversalPath, groupedInstances, required, sortAlphabetically, groupBy, ensureOrder, fieldFilter, customDirectives));
@@ -156,11 +154,11 @@ public class SpecificationInterpreter {
                         specField.sortAlphabetically = false;
                         specField.groupby = false;
                         specField.required = false;
-                        specField.fieldName = String.format("%s_%d", specField.fieldName, i);
+                        specField.fieldName = "%s_%d".formatted(specField.fieldName, i);
                     }
                     return Collections.singletonList(rootField);
                 } else if (!fieldsPerRelativePath.isEmpty()) {
-                    return Collections.singletonList(fieldsPerRelativePath.get(0));
+                    return Collections.singletonList(fieldsPerRelativePath.getFirst());
                 }
 
             }
@@ -169,8 +167,8 @@ public class SpecificationInterpreter {
     }
 
     private Object removeAtId(Object object) throws JSONException {
-        if (object instanceof JSONObject && ((JSONObject) object).has(JsonLdConsts.ID)) {
-            return ((JSONObject) object).get(JsonLdConsts.ID);
+        if (object instanceof JSONObject nObject && nObject.has(JsonLdConsts.ID)) {
+            return nObject.get(JsonLdConsts.ID);
         }
         return object;
 
@@ -187,8 +185,7 @@ public class SpecificationInterpreter {
 
 
     private List<Object> getAllRelativePaths(Object merge) throws JSONException {
-        if (merge instanceof JSONArray) {
-            JSONArray mergeArray = (JSONArray) merge;
+        if (merge instanceof JSONArray mergeArray) {
             List<Object> result = new ArrayList<>();
             for (int i = 0; i < mergeArray.length(); i++) {
                 if (mergeArray.get(i) instanceof JSONObject) {
@@ -207,8 +204,7 @@ public class SpecificationInterpreter {
 
     private List<SpecTraverse> createTraversalPath(Object relativePath) throws JSONException {
         List<SpecTraverse> result = new ArrayList<>();
-        if (relativePath instanceof JSONArray) {
-            JSONArray relativePathArray = (JSONArray) relativePath;
+        if (relativePath instanceof JSONArray relativePathArray) {
             for (int i = 0; i < relativePathArray.length(); i++) {
                 Object relativePathElement = relativePathArray.get(i);
                 if (relativePathElement != null) {
@@ -225,10 +221,10 @@ public class SpecificationInterpreter {
         String path = null;
         boolean reverse = false;
 
-        if (relativePathElement instanceof JSONObject && ((JSONObject) relativePathElement).has(JsonLdConsts.ID)) {
-            path = ((JSONObject) relativePathElement).getString(JsonLdConsts.ID);
-            if (((JSONObject) relativePathElement).has(GraphQueryKeys.GRAPH_QUERY_REVERSE.getFieldName())) {
-                reverse = ((JSONObject) relativePathElement).getBoolean(GraphQueryKeys.GRAPH_QUERY_REVERSE.getFieldName());
+        if (relativePathElement instanceof JSONObject object && object.has(JsonLdConsts.ID)) {
+            path = object.getString(JsonLdConsts.ID);
+            if (object.has(GraphQueryKeys.GRAPH_QUERY_REVERSE.getFieldName())) {
+                reverse = object.getBoolean(GraphQueryKeys.GRAPH_QUERY_REVERSE.getFieldName());
             }
         } else {
             path = relativePathElement.toString();

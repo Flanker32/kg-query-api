@@ -25,7 +25,7 @@ package org.humanbrainproject.knowledgegraph.indexing.control.spatial.rasterizer
 
 import org.humanbrainproject.knowledgegraph.indexing.control.spatial.transformation.QuickNii;
 import org.humanbrainproject.knowledgegraph.query.entity.ThreeDVector;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,15 +40,17 @@ public class TwoDimensionThreePointTest {
 
     @Test
     public void raster(){
-        Collection<ThreeDVector> raster = new TwoDimensionRasterizer(new QuickNii(" 116.76450275662296,\n" +
-                "           420.38180695602125,\n" +
-                "           371.05990195986874,\n" +
-                "           32.25523977201931,\n" +
-                "           -483.5743708352436,\n" +
-                "           -69.49201572740994,\n" +
-                "           88.9241921312597,\n" +
-                "           51.94987159616494,\n" +
-                "           -320.22912581890387")).raster();
+        Collection<ThreeDVector> raster = new TwoDimensionRasterizer(new QuickNii("""
+                 116.76450275662296,
+                           420.38180695602125,
+                           371.05990195986874,
+                           32.25523977201931,
+                           -483.5743708352436,
+                           -69.49201572740994,
+                           88.9241921312597,
+                           51.94987159616494,
+                           -320.22912581890387\
+                """)).raster();
         TwoDimensionRasterizer.draw(raster);
     }
 

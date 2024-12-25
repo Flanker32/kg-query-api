@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.converters.api;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.InternalApi;
 import org.humanbrainproject.knowledgegraph.commons.api.RestUtils;
@@ -39,17 +39,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstants.*;
+
 @RestController
 @RequestMapping(value = "/coverters")
 @InternalApi
-@Api(value="/converters", description = "The converter mechanisms")
+@Tag(name="/converters", description = "The converter mechanisms")
 @ToBeTested(easy = true)
 public class ConvertersAPI {
 

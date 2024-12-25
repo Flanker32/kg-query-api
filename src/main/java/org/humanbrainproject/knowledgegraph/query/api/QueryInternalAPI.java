@@ -23,8 +23,8 @@
 
 package org.humanbrainproject.knowledgegraph.query.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.InternalApi;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +55,7 @@ import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstant
 
 @RestController
 @RequestMapping(value = "/internal/api/query", produces = MediaType.APPLICATION_JSON)
-@Api(value = "/internal/api/query", description = "The API for querying the knowledge graph")
+@Tag(name = "/internal/api/query", description = "The API for querying the knowledge graph")
 @InternalApi
 @ToBeTested(easy = true)
 public class QueryInternalAPI {
@@ -98,7 +98,7 @@ public class QueryInternalAPI {
         return null;
     }
 
-    @ApiOperation(value="Fetch UUIDS")
+    @Operation(summary="Fetch UUIDS")
     @GetMapping(value = "/{"+ORG+"}/{"+ DOMAIN+"}/{"+SCHEMA+"}/{"+VERSION+"}/instancesid")
     public ResponseEntity<QueryResult> queryResolveByIdentifier(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
         try {authorizationContext.populateAuthorizationContext(authorizationToken);

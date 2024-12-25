@@ -42,16 +42,14 @@ import org.humanbrainproject.knowledgegraph.indexing.entity.todo.TodoItemWithDat
 import org.humanbrainproject.knowledgegraph.indexing.entity.todo.TodoList;
 import org.humanbrainproject.knowledgegraph.query.entity.JsonDocument;
 import org.humanbrainproject.knowledgegraph.query.entity.ThreeDVector;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -59,12 +57,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@Ignore
+@Disabled
 public class NexusTest {
 
     @Autowired
@@ -79,7 +76,7 @@ public class NexusTest {
     @Autowired
     NexusConfiguration nexusConfiguration;
 
-    @Before
+    @BeforeEach
     public void setup(){
         Mockito.reset(solr);
         Mockito.reset(databaseTransaction);
@@ -155,10 +152,10 @@ public class NexusTest {
             assertNumberOfItems(todoList.getInsertTodoItems(), "kg_inferred", 1);
             Map<String, List<InsertTodoItem>> byDatabase = groupByDatabase(todoList.getInsertTodoItems());
             List<InsertTodoItem> kg = byDatabase.get("kg");
-            assertEquals(2, kg.get(0).getVertex().getEdges().size());
+            assertEquals(2, kg.getFirst().getVertex().getEdges().size());
 
             List<InsertTodoItem> kgInferred = byDatabase.get("kg_inferred");
-            assertEquals(2, kgInferred.get(0).getVertex().getEdges().size());
+            assertEquals(2, kgInferred.getFirst().getVertex().getEdges().size());
             return null;
         }).when(databaseTransaction).execute(Mockito.any(TodoList.class));
 
@@ -225,7 +222,7 @@ public class NexusTest {
             assertNumberOfItems(todoList.getInsertTodoItems(), "kg_inferred", 0);
 
             assertEquals(1, todoList.getInsertOrUpdateInPrimaryStoreTodoItems().size());
-            InsertOrUpdateInPrimaryStoreTodoItem insertOrUpdateInPrimaryStoreTodoItem = todoList.getInsertOrUpdateInPrimaryStoreTodoItems().get(0);
+            InsertOrUpdateInPrimaryStoreTodoItem insertOrUpdateInPrimaryStoreTodoItem = todoList.getInsertOrUpdateInPrimaryStoreTodoItems().getFirst();
             SubSpace subSpace = insertOrUpdateInPrimaryStoreTodoItem.getVertex().getInstanceReference().getNexusSchema().getSubSpace();
             assertEquals(SubSpace.INFERRED, subSpace);
 
@@ -263,7 +260,7 @@ public class NexusTest {
             list.forEach( e->  assertTrue(e.getBlacklist().isEmpty() != hasBlacklistItems));
         }
         else{
-            Assert.assertFalse(hasBlacklistItems);
+            Assertions.assertFalse(hasBlacklistItems);
         }
     }
 

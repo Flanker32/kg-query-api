@@ -46,7 +46,7 @@ public class QuickNii implements ThreeDTransformation{
     }
 
     private QuickNii(List<ThreeDVector> vectors){
-        this(vectors.get(0), vectors.get(1), vectors.get(2));
+        this(vectors.getFirst(), vectors.get(1), vectors.get(2));
     }
 
     private QuickNii(ThreeDVector o, ThreeDVector u, ThreeDVector v) {

@@ -43,7 +43,7 @@ public class OidcAccessToken implements Credential {
     }
 
     public String getBearerToken(){
-        return this.token != null ? this.token.toLowerCase().startsWith("bearer ") ? StringUtils.capitalize(this.token) : String.format("Bearer %s", this.token) : null;
+        return this.token != null ? this.token.toLowerCase().startsWith("bearer ") ? StringUtils.capitalize(this.token) : "Bearer %s".formatted(this.token) : null;
     }
 
     @Override

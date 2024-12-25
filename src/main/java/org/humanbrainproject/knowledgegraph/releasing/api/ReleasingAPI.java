@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.releasing.api;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.control.builders.TreeScope;
@@ -37,7 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstant
 
 @RestController
 @RequestMapping(value = "/api/releases", produces = MediaType.APPLICATION_JSON)
-@Api(value = "/api/releases", description = "The extension API to release resources in the Knowledge Graph")
+@Tag(name = "/api/releases", description = "The extension API to release resources in the Knowledge Graph")
 @ToBeTested(easy = true)
 public class ReleasingAPI {
 

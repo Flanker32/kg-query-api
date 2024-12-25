@@ -31,8 +31,8 @@ import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceR
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusSchemaReference;
 import org.humanbrainproject.knowledgegraph.query.entity.JsonDocument;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -94,16 +94,16 @@ public class ReconciliationTest {
         vertices.add(vertex3);
 
         rec.mergeVertex(doc, vertices);
-        Assert.assertNotEquals(doc, null);
-        Assert.assertEquals( "test 1", doc.get("name"));
-        Assert.assertEquals( "no desc" , doc.get("desc"));
-        Assert.assertEquals("activity", doc.get("activity"));
+        Assertions.assertNotEquals(doc, null);
+        Assertions.assertEquals( "test 1", doc.get("name"));
+        Assertions.assertEquals( "no desc" , doc.get("desc"));
+        Assertions.assertEquals("activity", doc.get("activity"));
         Map alternatives = (HashMap) doc.get(HBPVocabulary.INFERENCE_ALTERNATIVES);
         List<Alternative> altNames = (List<Alternative>) alternatives.get("name");
         List<Alternative> alts = (List<Alternative>) alternatives.get("desc");
-        Assert.assertNotEquals( null, alternatives.get("activity"));
-        Assert.assertEquals(3, alts.size());
-        Assert.assertEquals(2, altNames.size());
+        Assertions.assertNotEquals( null, alternatives.get("activity"));
+        Assertions.assertEquals(3, alts.size());
+        Assertions.assertEquals(2, altNames.size());
 
     }
 
@@ -139,14 +139,14 @@ public class ReconciliationTest {
         vertices.add(vertex2);
 
         rec.mergeVertex(doc, vertices);
-        Assert.assertNotEquals(doc, null);
-        Assert.assertEquals( "test 2", doc.get("name"));
+        Assertions.assertNotEquals(doc, null);
+        Assertions.assertEquals( "test 2", doc.get("name"));
         Map alternatives = (HashMap) doc.get(HBPVocabulary.INFERENCE_ALTERNATIVES);
         List<Alternative> altNames = ((List<Alternative>) alternatives.get("name")).stream().filter(al -> !al.getIsSelected()).collect(Collectors.toList());
-        Assert.assertEquals(1, altNames.size());
-        Assert.assertEquals("test 1",  altNames.get(0).getValue());
-        Assert.assertEquals(1,  altNames.get(0).getUserIds().size());
-        Assert.assertEquals("123",  altNames.get(0).getUserIds().toArray()[0]);
+        Assertions.assertEquals(1, altNames.size());
+        Assertions.assertEquals("test 1",  altNames.getFirst().getValue());
+        Assertions.assertEquals(1,  altNames.getFirst().getUserIds().size());
+        Assertions.assertEquals("123",  altNames.getFirst().getUserIds().toArray()[0]);
 
     }
 
@@ -210,16 +210,16 @@ public class ReconciliationTest {
         vertices.add(vertex5);
 
         rec.mergeVertex(doc, vertices);
-        Assert.assertNotEquals(doc, null);
-        Assert.assertEquals( "test 1", doc.get("name"));
+        Assertions.assertNotEquals(doc, null);
+        Assertions.assertEquals( "test 1", doc.get("name"));
         Map alternatives = (HashMap) doc.get(HBPVocabulary.INFERENCE_ALTERNATIVES);
         List<Alternative> altNames = ((List<Alternative>) alternatives.get("name")).stream().filter(al -> !al.getIsSelected()).collect(Collectors.toList());
-        Assert.assertEquals(1, altNames.size());
-        Alternative a = altNames.get(0);
-        Assert.assertEquals("test 2", a.getValue());
-        Assert.assertEquals(2, a.getUserIds().size());
-        Assert.assertEquals(true, a.getUserIds().contains("000"));
-        Assert.assertEquals(true, a.getUserIds().contains("456"));
+        Assertions.assertEquals(1, altNames.size());
+        Alternative a = altNames.getFirst();
+        Assertions.assertEquals("test 2", a.getValue());
+        Assertions.assertEquals(2, a.getUserIds().size());
+        Assertions.assertEquals(true, a.getUserIds().contains("000"));
+        Assertions.assertEquals(true, a.getUserIds().contains("456"));
 
 
     }

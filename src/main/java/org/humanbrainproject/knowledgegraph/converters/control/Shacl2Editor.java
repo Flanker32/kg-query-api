@@ -61,7 +61,7 @@ public class Shacl2Editor {
            return editorSpecField;
         }).collect(Collectors.toList());
         if(!shaclShape.isEmpty()) {
-            return new EditorSpec(schemaReference, shaclShape.get(0).getLabel(), null, null, fields);
+            return new EditorSpec(schemaReference, shaclShape.getFirst().getLabel(), null, null, fields);
         }
         return null;
     }

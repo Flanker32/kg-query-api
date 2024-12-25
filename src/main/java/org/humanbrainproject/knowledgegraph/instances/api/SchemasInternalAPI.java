@@ -23,7 +23,7 @@
 
 package org.humanbrainproject.knowledgegraph.instances.api;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.configuration.ConversionException;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.InternalApi;
@@ -37,14 +37,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstants.*;
 
 @RestController
 @RequestMapping(value = "/internal/api/schemas", produces = MediaType.APPLICATION_JSON)
 @InternalApi
-@Api(value = "/internal/api/schemas", description = "The API for managing schemas")
+@Tag(name = "/internal/api/schemas", description = "The API for managing schemas")
 @ToBeTested(easy = true)
 public class SchemasInternalAPI {
 
@@ -62,7 +62,7 @@ public class SchemasInternalAPI {
     }
 
     @PutMapping(value = "/{"+ORG+"}/{"+DOMAIN+"}/{"+SCHEMA+"}/{"+VERSION+"}")
-    public ResponseEntity<Void> createSimpleSchema(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @RequestParam(value = "subSpace", required = false) String subSpace, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
+    public ResponseEntity<Void> createSimpleSchema(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @RequestParam(required = false) String subSpace, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
         try {
             authorizationContext.populateAuthorizationContext(authorizationToken);
             NexusSchemaReference schemaReference = new NexusSchemaReference(org, domain, schema, version);

@@ -23,8 +23,8 @@
 
 package org.humanbrainproject.knowledgegraph.instances.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +53,7 @@ import static org.humanbrainproject.knowledgegraph.commons.api.ParameterConstant
 
 @RestController
 @RequestMapping(value = "/api/instances", produces = MediaType.APPLICATION_JSON)
-@Api(value = "/api/instances", description = "The API for managing instances")
+@Tag(name = "/api/instances", description = "The API for managing instances")
 @ToBeTested(easy = true)
 public class InstancesAPI {
 
@@ -70,7 +70,7 @@ public class InstancesAPI {
     QueryContext queryContext;
 
     @GetMapping(value = "/{org}/{domain}/{schema}/{version}/{id}/graph")
-    public ResponseEntity<Map> getGraph(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable("id") String id, @RequestParam(value= "step", required = false, defaultValue = "2") Integer step, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
+    public ResponseEntity<Map> getGraph(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable String id, @RequestParam(required = false, defaultValue = "2") Integer step, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         try{
             NexusInstanceReference instanceReference = new NexusInstanceReference(org, domain, schema, version, id);
@@ -83,7 +83,7 @@ public class InstancesAPI {
 
 
     @PostMapping("/{queryId}")
-    public ResponseEntity<List<Map>> getInstancesByIds(@RequestBody @ApiParam("The relative ids (starting with the organization) which shall be fetched") List<String> ids, @PathVariable("queryId") String queryId, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @ApiParam(VOCAB_DOC)  @RequestParam(value = VOCAB, required = false) String vocab, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws SolrServerException, IOException, JSONException {
+    public ResponseEntity<List<Map>> getInstancesByIds(@RequestBody @Parameter(title = "The relative ids (starting with the organization) which shall be fetched") List<String> ids, @PathVariable String queryId, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken, @Parameter(title = VOCAB_DOC)  @RequestParam(value = VOCAB, required = false) String vocab, @RequestParam(value = DATABASE_SCOPE, required = false) ExposedDatabaseScope databaseScope, @ApiIgnore @RequestParam Map<String, String> allRequestParams) throws SolrServerException, IOException, JSONException {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         queryContext.populateQueryContext(databaseScope);
         Set<NexusInstanceReference> references = ids.stream().map(id -> NexusInstanceReference.createFromUrl(id)).collect(Collectors.toSet());
@@ -93,7 +93,7 @@ public class InstancesAPI {
 
 
     @DeleteMapping(value = "/{org}/{domain}/{schema}/{version}/{id}")
-    public ResponseEntity<Void> deleteInstance(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable("id") String id, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
+    public ResponseEntity<Void> deleteInstance(@PathVariable(ORG) String org, @PathVariable(DOMAIN) String domain, @PathVariable(SCHEMA) String schema, @PathVariable(VERSION) String version, @PathVariable String id, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         if (instances.removeInstance(new NexusInstanceReference(org, domain, schema, version, id))) {
             return ResponseEntity.ok().build();

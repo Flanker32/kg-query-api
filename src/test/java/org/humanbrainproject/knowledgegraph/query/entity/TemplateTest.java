@@ -24,9 +24,9 @@
 package org.humanbrainproject.knowledgegraph.query.entity;
 
 import org.humanbrainproject.knowledgegraph.commons.vocabulary.ArangoVocabulary;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TemplateTest {
 

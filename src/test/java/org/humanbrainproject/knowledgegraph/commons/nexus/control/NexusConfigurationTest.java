@@ -27,16 +27,16 @@ import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceR
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusRelativeUrl;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusSchemaReference;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class NexusConfigurationTest {
 
     NexusConfiguration nexusConfiguration;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.nexusConfiguration = TestObjectFactory.createNexusConfiguration();
     }

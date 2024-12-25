@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
@@ -47,7 +46,7 @@ public class FileStructureData {
     public FileStructureData(ZipInputStream data){
         this.data = data;
         generatedId = UUID.randomUUID();
-        this.tmpPath = Paths.get(String.format("/tmp/nexusUpload/%s", generatedId.toString()));
+        this.tmpPath = Path.of("/tmp/nexusUpload/%s".formatted(generatedId.toString()));
     }
 
     private void storeStructure() throws IOException {

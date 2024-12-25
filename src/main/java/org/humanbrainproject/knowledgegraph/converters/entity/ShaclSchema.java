@@ -47,8 +47,8 @@ public class ShaclSchema {
             shapes = this.shaclDocument.get(NEXUS_VOCAB + "shapes");
         } else if (this.shaclDocument.containsKey(JsonLdConsts.REVERSE)) {
             Object reverse = this.shaclDocument.get(JsonLdConsts.REVERSE);
-            if (reverse instanceof Map && ((Map) reverse).containsKey(RDF_VOCAB + "isDefinedBy")) {
-                shapes = ((Map) reverse).get(RDF_VOCAB + "isDefinedBy");
+            if (reverse instanceof Map<?,?> map && map.containsKey(RDF_VOCAB + "isDefinedBy")) {
+                shapes = map.get(RDF_VOCAB + "isDefinedBy");
             }
         }
 

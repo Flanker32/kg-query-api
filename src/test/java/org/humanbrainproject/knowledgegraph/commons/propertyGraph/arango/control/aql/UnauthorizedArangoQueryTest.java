@@ -23,16 +23,16 @@
 
 package org.humanbrainproject.knowledgegraph.commons.propertyGraph.arango.control.aql;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UnauthorizedArangoQueryTest {
 
     AQL q;
 
-    @Before
+    @BeforeEach
     public void setup(){
         q = new AQL();
     }

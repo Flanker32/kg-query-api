@@ -25,17 +25,17 @@ package org.humanbrainproject.knowledgegraph.releasing.entity;
 
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusInstanceReference;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ReleaseStatusResponseTest{
 
 
     private ReleaseStatusResponse releaseStatusResponse;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         releaseStatusResponse = new ReleaseStatusResponse();
     }

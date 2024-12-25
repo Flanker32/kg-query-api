@@ -24,7 +24,7 @@
 package org.humanbrainproject.knowledgegraph.nexus.api;
 
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.humanbrainproject.knowledgegraph.annotations.ToBeTested;
 import org.humanbrainproject.knowledgegraph.commons.authorization.control.AuthorizationContext;
@@ -38,9 +38,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping(value = "/nexus", produces = MediaType.APPLICATION_JSON)
-@Api(value = "/nexus", description = "The helper API for nexus")
+@Tag(name = "/nexus", description = "The helper API for nexus")
 @ToBeTested(easy = true)
 public class NexusApiUtils {
 
@@ -79,7 +79,7 @@ public class NexusApiUtils {
     }
 
     @GetMapping(value = "/{uuid}")
-    public ResponseEntity<UploadStatus> getUploadStatus(@PathVariable(value = "uuid") String uuid, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
+    public ResponseEntity<UploadStatus> getUploadStatus(@PathVariable String uuid, @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorizationToken) {
         authorizationContext.populateAuthorizationContext(authorizationToken);
         try{
             UploadStatus s = nexusUtils.retreiveUploadStatus(UUID.fromString(uuid));

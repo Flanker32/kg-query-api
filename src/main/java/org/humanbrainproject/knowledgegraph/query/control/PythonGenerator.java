@@ -65,27 +65,27 @@ public class PythonGenerator {
 
 
         for (PythonClass pythonClass : pythonClasses) {
-            sb.append(String.format("\nclass %s:\n", pythonClass.getName()));
+            sb.append("\nclass %s:\n".formatted(pythonClass.getName()));
             for (PythonField pythonField : pythonClass.getFields()) {
-                sb.append(String.format("    %s: %s\n", pythonField.getName(), pythonField.getType()!=null ? String.format("Sequence[%s]", pythonField.getType()) : "any"));
+                sb.append("    %s: %s\n".formatted(pythonField.getName(), pythonField.getType() != null ? "Sequence[%s]".formatted(pythonField.getType()) : "any"));
             }
             sb.append("\n");
             String fieldName = getPythonFieldName(pythonClass.getName());
-            sb.append(String.format("\ndef _%s_from_payload(payload: dict) -> %s:\n", fieldName, pythonClass.getName()));
-            sb.append(String.format("    %s = %s()", fieldName, pythonClass.getName()));
+            sb.append("\ndef _%s_from_payload(payload: dict) -> %s:\n".formatted(fieldName, pythonClass.getName()));
+            sb.append("    %s = %s()".formatted(fieldName, pythonClass.getName()));
             for (PythonField pythonField : pythonClass.getFields()) {
                 if(pythonField.getType()==null) {
-                    sb.append(String.format("\n    %s.%s = payload[\"%s\"] if \"%s\" in payload else None", fieldName, pythonField.getName(), pythonField.getKey(), pythonField.getKey()));
+                    sb.append("\n    %s.%s = payload[\"%s\"] if \"%s\" in payload else None".formatted(fieldName, pythonField.getName(), pythonField.getKey(), pythonField.getKey()));
                 }
                 else{
-                    sb.append(String.format("\n    %s.%s = []\n", fieldName, pythonField.getName()));
-                    sb.append(String.format("    if \"%s\" in payload and isinstance(payload[\"%s\"], list):\n", pythonField.getKey(), pythonField.getKey()));
-                    sb.append(String.format("        for c in payload[\"%s\"]:\n", pythonField.getKey()));
-                    sb.append(String.format("            %s.%s.append(_%s_from_payload(c))" +
-                            "", fieldName, pythonField.getName(), semanticsToHumanTranslator.simplePluralToSingular(pythonField.getName()).toLowerCase()));
+                    sb.append("\n    %s.%s = []\n".formatted(fieldName, pythonField.getName()));
+                    sb.append("    if \"%s\" in payload and isinstance(payload[\"%s\"], list):\n".formatted(pythonField.getKey(), pythonField.getKey()));
+                    sb.append("        for c in payload[\"%s\"]:\n".formatted(pythonField.getKey()));
+                    sb.append(("            %s.%s.append(_%s_from_payload(c))" +
+                            "").formatted(fieldName, pythonField.getName(), semanticsToHumanTranslator.simplePluralToSingular(pythonField.getName()).toLowerCase()));
                 }
             }
-            sb.append(String.format("\n    return %s", fieldName));
+            sb.append("\n    return %s".formatted(fieldName));
             sb.append("\n\n");
         }
 
@@ -95,22 +95,22 @@ public class PythonGenerator {
 
         String rootClassName = StringUtils.capitalize(semanticsToHumanTranslator.simplePluralToSingular(schemaReference.getSchema()));
 
-        sb.append(String.format("\nclass %s(Query[%s]):\n\n", StringUtils.capitalize(specification.getSpecificationId())+rootClassName, rootClassName));
-        sb.append(String.format("    def __init__(self, client: KGClient%s):\n", filterParametersPythonWithNone));
-        sb.append(String.format("        super().__init__(client, \"%s\", \"%s\")\n", schemaReference.getRelativeUrl().getUrl(), specification.getSpecificationId()));
+        sb.append("\nclass %s(Query[%s]):\n\n".formatted(StringUtils.capitalize(specification.getSpecificationId()) + rootClassName, rootClassName));
+        sb.append("    def __init__(self, client: KGClient%s):\n".formatted(filterParametersPythonWithNone));
+        sb.append("        super().__init__(client, \"%s\", \"%s\")\n".formatted(schemaReference.getRelativeUrl().getUrl(), specification.getSpecificationId()));
         for (String filterParameter : filterParametersPython) {
-            sb.append(String.format("        self._%s = %s\n", filterParameter, filterParameter));
+            sb.append("        self._%s = %s\n".formatted(filterParameter, filterParameter));
         }
         sb.append("\n");
-        sb.append(String.format("    def create_result(self, payload: dict) -> %s:\n", rootClassName));
-        sb.append(String.format("        return _%s_from_payload(payload)\n", rootClassName.toLowerCase()));
+        sb.append("    def create_result(self, payload: dict) -> %s:\n".formatted(rootClassName));
+        sb.append("        return _%s_from_payload(payload)\n".formatted(rootClassName.toLowerCase()));
         sb.append("\n");
-        sb.append(String.format("    def create_filter_params(self) -> str:\n", rootClassName));
+        sb.append("    def create_filter_params(self) -> str:\n".formatted(rootClassName));
         StringBuilder queryConcat = new StringBuilder();
         sb.append("        filter = \"\"\n");
         for(int i=0; i<filterParameters.size(); i++){
-            sb.append(String.format("        if self._%s is not None:\n", filterParametersPython.get(i)));
-            sb.append(String.format("                filter = filter + \"&%s=\" + self._%s\n", filterParameters.get(i).getName(), filterParametersPython.get(i)));
+            sb.append("        if self._%s is not None:\n".formatted(filterParametersPython.get(i)));
+            sb.append("                filter = filter + \"&%s=\" + self._%s\n".formatted(filterParameters.get(i).getName(), filterParametersPython.get(i)));
         }
         sb.append("        return filter\n\n");
 

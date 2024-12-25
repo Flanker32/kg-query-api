@@ -25,7 +25,7 @@ package org.humanbrainproject.knowledgegraph.nexus.entity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.humanbrainproject.knowledgegraph.commons.jsonld.control.JsonLdStandardization;
 import org.humanbrainproject.knowledgegraph.commons.propertyGraph.entity.Tuple;
@@ -38,7 +38,7 @@ import org.humanbrainproject.knowledgegraph.query.entity.QueryResult;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
-import javax.ws.rs.BadRequestException;
+import jakarta.ws.rs.BadRequestException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -163,7 +163,7 @@ public class FileStructureDataExtractor {
                 // bytes to hex
                 StringBuilder checksum = new StringBuilder();
                 for (byte b : md.digest()) {
-                    checksum.append(String.format("%02x", b));
+                    checksum.append("%02x".formatted(b));
                 }
                 Gson gson = new Gson();
                 json.put(HBPVocabulary.INTERNAL_HASHCODE, checksum);

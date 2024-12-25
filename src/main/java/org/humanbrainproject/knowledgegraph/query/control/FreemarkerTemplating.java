@@ -121,7 +121,7 @@ public class FreemarkerTemplating {
     String applyTemplate(String template, QueryResult<List<Map>> queryResult, String libraryContent) {
         String finalTemplate;
         if(libraryContent!=null){
-            finalTemplate = String.format("%s\n\n%s", libraryContent, template);
+            finalTemplate = "%s\n\n%s".formatted(libraryContent, template);
         }
         else{
             finalTemplate = template;
@@ -145,14 +145,13 @@ public class FreemarkerTemplating {
     }
 
     private void replaceSpecialCharacters(Object o){
-        if(o instanceof Map){
-            Map map = (Map)o;
+        if(o instanceof Map<?,?> map){
             Set<Object> keys = new HashSet<Object>();
             keys.addAll(map.keySet());
             for (Object key : keys) {
                 replaceSpecialCharacters(map.get(key));
-                if(key instanceof String){
-                    String newkey = replaceSpecialChars((String)key);
+                if(key instanceof String string){
+                    String newkey = replaceSpecialChars(string);
                     if(!key.equals(newkey)){
                         map.put(newkey, map.get(key));
                         map.remove(key);
@@ -160,8 +159,7 @@ public class FreemarkerTemplating {
                 }
             }
         }
-        else if(o instanceof Collection) {
-            Collection c = (Collection) o;
+        else if(o instanceof Collection<?> c) {
             for (Object el : c) {
                 replaceSpecialCharacters(el);
             }

@@ -33,7 +33,7 @@ import org.humanbrainproject.knowledgegraph.suggestion.control.SuggestionControl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Map;
 

@@ -58,7 +58,7 @@ public class ContextController {
             }
             if (nexusClient.get(nexusContextReference.getRelativeUrlForDomain(), credential, Map.class) == null) {
                 Map<String, String> payload = new LinkedHashMap<>();
-                payload.put("description", String.format("The domain %s for organization %s", nexusContextReference.getDomain(), nexusContextReference.getOrganization()));
+                payload.put("description", "The domain %s for organization %s".formatted(nexusContextReference.getDomain(), nexusContextReference.getOrganization()));
                 nexusClient.put(nexusContextReference.getRelativeUrlForDomain(), null, payload, credential);
             }
             nexusClient.put(nexusContextReference.getRelativeUrlForContext(), null, contextPayload, credential);
@@ -76,6 +76,6 @@ public class ContextController {
     private void publishContext(NexusSchemaReference nexusSchemaReference, Integer revision, Credential credential) {
         Map<String, Boolean> payload = new LinkedHashMap<>();
         payload.put("published", true);
-        nexusClient.patch(new NexusRelativeUrl(NexusConfiguration.ResourceType.CONTEXT, String.format("%s/config", nexusSchemaReference.getRelativeUrlForContext().getUrl())), revision, payload, credential);
+        nexusClient.patch(new NexusRelativeUrl(NexusConfiguration.ResourceType.CONTEXT, "%s/config".formatted(nexusSchemaReference.getRelativeUrlForContext().getUrl())), revision, payload, credential);
     }
 }

@@ -28,8 +28,7 @@ import org.humanbrainproject.knowledgegraph.commons.jsonld.control.JsonLdStandar
 import org.humanbrainproject.knowledgegraph.commons.jsonld.control.JsonTransformer;
 import org.humanbrainproject.knowledgegraph.indexing.entity.nexus.NexusSchemaReference;
 import org.humanbrainproject.knowledgegraph.query.entity.JsonDocument;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -42,7 +41,7 @@ public class Shacl2EditorTest {
     private Shacl2Editor shacl2Editor;
 
 
-    @Before
+    @BeforeEach
     public void setup(){
         jsonLdStandardization = new JsonLdStandardization();
         shacl2Editor = new Shacl2Editor();

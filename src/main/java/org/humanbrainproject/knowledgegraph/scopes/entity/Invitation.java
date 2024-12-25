@@ -51,10 +51,10 @@ public class Invitation extends JsonLdObject {
 
     private AbsoluteNexusInstanceReference getSingleReferenceFromPayload(JsonDocument jsonDocument, String field){
         Object object = jsonDocument.get(field);
-        if(object instanceof Map){
-            Object id = ((Map) object).get(JsonLdConsts.ID);
-            if(id instanceof String){
-                return new AbsoluteNexusInstanceReference(NexusInstanceReference.createFromUrl((String)id), (String)id);
+        if(object instanceof Map<?,?> map){
+            Object id = map.get(JsonLdConsts.ID);
+            if(id instanceof String string){
+                return new AbsoluteNexusInstanceReference(NexusInstanceReference.createFromUrl(string), string);
             }
         }
         return null;

@@ -28,8 +28,8 @@ import org.humanbrainproject.knowledgegraph.commons.authorization.entity.Credent
 import org.humanbrainproject.knowledgegraph.commons.authorization.entity.InternalMasterKey;
 import org.humanbrainproject.knowledgegraph.commons.authorization.entity.OidcAccessToken;
 import org.humanbrainproject.knowledgegraph.testFactory.TestObjectFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
@@ -46,13 +46,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthorizationControllerTest {
 
     AuthorizationController controller;
 
-    @Before
+    @BeforeEach
     public void setup(){
         controller = new AuthorizationController();
     }

@@ -47,7 +47,7 @@ public class LinkingInstance extends KnownSemantic {
     private NexusInstanceReference getSingleResult(List<NexusInstanceReference> referencesForLinkedInstances, String errorMessage) {
         if (referencesForLinkedInstances != null && !referencesForLinkedInstances.isEmpty()) {
             if (referencesForLinkedInstances.size() == 1) {
-                return referencesForLinkedInstances.get(0);
+                return referencesForLinkedInstances.getFirst();
             } else {
                 throw new UnexpectedNumberOfResults(errorMessage);
             }

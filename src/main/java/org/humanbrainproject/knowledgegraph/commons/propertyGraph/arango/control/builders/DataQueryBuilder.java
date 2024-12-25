@@ -400,7 +400,7 @@ public class DataQueryBuilder {
             for (SpecField groupByField : groupByFields) {
                 AQL groupField = new AQL();
                 groupField.add(trust("`${field}` = ${traverseField}_grp_inst.`${field}`"));
-                if (groupByField != groupByFields.get(groupByFields.size() - 1)) {
+                if (groupByField != groupByFields.getLast()) {
                     groupField.addComma();
                 }
                 groupField.setParameter("field", groupByField.fieldName);
@@ -417,7 +417,7 @@ public class DataQueryBuilder {
             for (SpecField notGroupedByField : notGroupedByFields) {
                 AQL notGroupedField = new AQL();
                 notGroupedField.add(trust("\"${field}\": ${traverseField}_group_el.${traverseField}_grp_inst.`${field}`"));
-                if (notGroupedByField != notGroupedByFields.get(notGroupedByFields.size() - 1)) {
+                if (notGroupedByField != notGroupedByFields.getLast()) {
                     notGroupedField.addComma();
                 }
                 notGroupedField.setParameter("field", notGroupedByField.fieldName);
@@ -451,7 +451,7 @@ public class DataQueryBuilder {
                 for (SpecField specField : groupedSortFields) {
                     AQL groupSort = new AQL();
                     groupSort.add(trust("`${field}`"));
-                    if (specField != groupedSortFields.get(groupedSortFields.size() - 1)) {
+                    if (specField != groupedSortFields.getLast()) {
                         groupSort.addComma();
                     }
                     groupSort.setParameter("field", specField.fieldName);
@@ -468,7 +468,7 @@ public class DataQueryBuilder {
                 for (SpecField notGroupedSortField : notGroupedSortFields) {
                     AQL notGroupedSort = new AQL();
                     notGroupedSort.add(trust("${traverseField}_group_el.${traverseField}_grp_inst.`${field}`"));
-                    if (notGroupedSortField != notGroupedSortFields.get(notGroupedSortFields.size() - 1)) {
+                    if (notGroupedSortField != notGroupedSortFields.getLast()) {
                         notGroupedSort.addComma();
                     }
                     notGroupedSort.setParameter("field", notGroupedSortField.fieldName);
@@ -505,7 +505,7 @@ public class DataQueryBuilder {
                 for (SpecField field : fields) {
                     AQL fieldResult = new AQL();
                     fieldResult.add(trust("(${fieldRepresentation} != NULL AND ${fieldRepresentation} != [])"));
-                    if (field != fields.get(fields.size() - 1)) {
+                    if (field != fields.getLast()) {
                         fieldResult.add(trust(" OR "));
                     }
                     fieldResult.setTrustedParameter("fieldRepresentation", getRepresentationOfField(parentAlias, field));
@@ -532,7 +532,7 @@ public class DataQueryBuilder {
                     fieldResult.add(new TrustedAqlValue("\"${fieldName}\": ${fieldRepresentation}"));
                     fieldResult.setParameter("fieldName", field.fieldName);
                     fieldResult.setTrustedParameter("fieldRepresentation", getRepresentationOfField(parentAlias, field));
-                    if (field != fields.get(fields.size() - 1)) {
+                    if (field != fields.getLast()) {
                         fieldResult.addComma();
                     }
                     aql.addLine(fieldResult.build());
@@ -569,7 +569,7 @@ public class DataQueryBuilder {
                 aql.add(trust("SORT "));
                 for (SpecField sortField : sortFields) {
                     AQL sort = new AQL();
-                    if (sortField != sortFields.get(0)) {
+                    if (sortField != sortFields.getFirst()) {
                         sort.addComma();
                     }
                     sort.add(trust("${field}"));
